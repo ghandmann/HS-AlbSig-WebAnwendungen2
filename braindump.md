@@ -5,6 +5,8 @@ Hier werden einfach Ideen ge-brain-dumpt und später ausgearbeitet oder auch wie
 ## Mögliche Themen
 
 * HTML, JS, CSS Stack (Nur auffrischen)
+  - HTML Timeline
+  - archive.org footage
   - Bootstrap
   - Responsiveness
 * Geschichte
@@ -32,6 +34,7 @@ Hier werden einfach Ideen ge-brain-dumpt und später ausgearbeitet oder auch wie
   - SSL Terminierung FrontendProxy
 * WebSockets
 * HTML Injections
+* JSON
 * Datenbanken
   - SQL Basics
   - SQL Injections
