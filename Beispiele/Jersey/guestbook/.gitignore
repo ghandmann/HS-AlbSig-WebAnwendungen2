@@ -23,3 +23,5 @@ buildNumber.properties
  
 # Mac
 .DS_Store
+
+bin/
