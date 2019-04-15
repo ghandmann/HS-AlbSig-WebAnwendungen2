@@ -24,7 +24,12 @@ public class Guestbook {
     	// WTF, without this line, i get weird cannot find driver errors...
     	Class.forName("org.sqlite.JDBC");
     	
-    	Connection connection = DriverManager.getConnection("jdbc:sqlite:/tmp/sample.db");
+    	// This only works for Linux people...
+    	// Change this path to the real location of the sample.db
+    	// See $repo/sql/ folder for create scripts
+    	String sqliteDatabasePath = "/tmp/sample.db";
+    	
+    	Connection connection = DriverManager.getConnection("jdbc:sqlite:" + sqliteDatabasePath);
     	return connection;
 	}
     
