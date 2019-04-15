@@ -1,4 +1,4 @@
-package de.sveneppler.jersey_quickstart;
+package de.sveneppler.guestbook_classic;
 
 import java.net.URI;
 import java.sql.Connection;
@@ -62,7 +62,7 @@ public class Guestbook {
     	sth.execute(query);
     	
     	System.out.println("OK  Poster=\" + poster + \"; Email=\" + email + \"; Entry=\" + entry");
-    	URI redirectURI = new URI("/jersey-quickstart/webapi/guestbook");
+    	URI redirectURI = new URI("/guestbook-classic/webapi/guestbook");
 		return Response.seeOther(redirectURI).build();
     }
     
@@ -74,7 +74,7 @@ public class Guestbook {
     	
     	sth.execute("DELETE FROM Entries WHERE ROWID = " + id);
     	
-    	URI redirectURI = new URI("/jersey-quickstart/webapi/guestbook");
+    	URI redirectURI = new URI("/guestbook-classic/webapi/guestbook");
 		return Response.seeOther(redirectURI).build();
     	
     }

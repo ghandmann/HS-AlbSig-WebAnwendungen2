@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.sveneppler</groupId>
-    <artifactId>jersey-quickstart</artifactId>
+    <artifactId>guestbook-classic</artifactId>
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jersey-quickstart</name>
+    <name>guestbook-classic</name>
 
     <build>
-        <finalName>jersey-quickstart</finalName>
+        <finalName>guestbook-classic</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

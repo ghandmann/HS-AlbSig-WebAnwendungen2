@@ -1,4 +1,4 @@
-package de.sveneppler.jersey_quickstart;
+package de.sveneppler.guestbook_classic;
 
 public class EntryModel {
 	int id;

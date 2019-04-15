@@ -1,4 +1,4 @@
-package de.sveneppler.jersey_quickstart;
+package de.sveneppler.guestbook_classic;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
