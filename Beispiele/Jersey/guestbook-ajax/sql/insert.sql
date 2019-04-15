@@ -1,0 +1,2 @@
+INSERT INTO Entries (poster, email, entry) VALUES ("Sven", "sven@sveneppler.de", "Das ist mein erster Eintrag!");
+INSERT INTO Entries (poster, email, entry) VALUES ("Jemand", "anderes@jemand.de", "Cooles Gästebuch!");
