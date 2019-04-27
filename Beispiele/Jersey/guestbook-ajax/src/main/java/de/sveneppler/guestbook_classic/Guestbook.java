@@ -35,7 +35,16 @@ public class Guestbook {
     
     @GET
     public Viewable Template() throws Exception {
-    	Connection connection = getConnection();
+    	Vector<EntryModel> entries = getGuestbookEntriesFromDatabase();
+    	
+    	Hashtable<String, Object> model = new Hashtable<String, Object>();
+    	model.put("entries", entries);
+    	
+    	return new Viewable("/guestbook", model);
+    }
+
+	private Vector<EntryModel> getGuestbookEntriesFromDatabase() throws Exception {
+		Connection connection = getConnection();
     	Statement sth = connection.createStatement();
     	
     	ResultSet rs = sth.executeQuery("SELECT * FROM Entries ORDER BY ROWID DESC");
@@ -44,12 +53,8 @@ public class Guestbook {
     		EntryModel entry = new EntryModel(rs.getInt("id"), rs.getString("poster"), rs.getString("email"), rs.getString("entry"));
     		entries.add(entry);
     	}
-    	
-    	Hashtable<String, Object> model = new Hashtable<String, Object>();
-    	model.put("entries", entries);
-    	
-    	return new Viewable("/guestbook", model);
-    }
+		return entries;
+	}
     
     @POST
     public Response AddEntry(@FormParam("poster") String poster, @FormParam("email") String email, @FormParam("entry") String entry) throws Exception {
