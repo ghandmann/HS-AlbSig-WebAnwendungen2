@@ -16,6 +16,15 @@
 	color: white;
 }
 </style>
+
+<!-- Include jQuery in our Guestbook -->
+<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+  
+<!-- Include our JavaScript sources for the guestbook -->
+<script src="../guestbook.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -40,19 +49,9 @@
 		</form>
 		<hr/>
 		
-		<h2>Gästebucheinträge (${ model.entries.size() })</h2>
+		<h2>Gästebucheinträge <a href="javascript:void(0)" id="reload-button" class="btn btn-success">Reload</a></h2>
 		
-		<c:forEach var="entry" items="${ model.entries }">
-			<div class="card entry">
-			  <div class="card-header text-white bg-secondary">
-			    Von <strong>${ entry.poster }</strong> (${ entry.email })
-			    <a href="./guestbook/delete?id=${ entry.id }" class="float-right">Eintrag Löschen</a>
-			  </div>
-			  <div class="card-body bg-dark text-white">
-			    <p class="card-text">${ entry.entry }</p>
-			  </div>
-			</div>
-		</c:forEach>
+		<div id="entry-container"></div>
 	</div>
 </body>
 </html>

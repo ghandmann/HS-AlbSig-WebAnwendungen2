@@ -83,4 +83,15 @@ public class Guestbook {
 		return Response.seeOther(redirectURI).build();
     	
     }
+    
+    @GET
+    @Path("entries.html")
+    public Viewable EntriesAsHtml() throws Exception {
+    	Vector<EntryModel> entries = getGuestbookEntriesFromDatabase();
+    	
+    	Hashtable<String, Object> model = new Hashtable<String, Object>();
+    	model.put("entries", entries);
+    	
+    	return new Viewable("/guestbookEntries", model);
+    }
 }
