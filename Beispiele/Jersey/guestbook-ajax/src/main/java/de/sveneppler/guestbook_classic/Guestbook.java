@@ -67,8 +67,7 @@ public class Guestbook {
     	sth.execute(query);
     	
     	System.out.println("OK  Poster=\" + poster + \"; Email=\" + email + \"; Entry=\" + entry");
-    	URI redirectURI = new URI("/guestbook-ajax/webapi/guestbook");
-		return Response.seeOther(redirectURI).build();
+		return Response.ok().build();
     }
     
     @GET

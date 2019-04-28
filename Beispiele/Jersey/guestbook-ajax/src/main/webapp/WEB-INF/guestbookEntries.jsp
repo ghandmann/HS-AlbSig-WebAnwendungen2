@@ -11,7 +11,7 @@
 	<div class="card entry">
 	  <div class="card-header text-white bg-secondary">
 	    Von <strong>${ entry.poster }</strong> (${ entry.email })
-	    <a href="./guestbook/delete?id=${ entry.id }" class="float-right">Eintrag Löschen</a>
+	    <a href="javascript:void(0)" data-id="${ entry.id }" class="float-right">Eintrag Löschen</a>
 	  </div>
 	  <div class="card-body bg-dark text-white">
 	    <p class="card-text">${ entry.entry }</p>
