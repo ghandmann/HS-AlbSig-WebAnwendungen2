@@ -7,6 +7,11 @@ $(onDocumentReady);
 function onDocumentReady() {
 	loadGuestbookEntries();
 	connectReloadButton();
+	connectEntryButton();
+}
+
+function connectEntryButton() {
+	$("#entry-button").click(createEntry);
 }
 
 // Fetches the guestbook entries from the server asynchronously via XmlHttpRequests (AJAX) 
@@ -79,10 +84,11 @@ function connectReloadButton() {
 	button.click(loadGuestbookEntries);
 }
 
-function createEntry() {
+function createEntry(e) {
 	let posterInput = $("#poster");
 	let emailInput = $("#email");
 	let entryTextarea = $("#entry");
+	
 	
 	// Create a JSON-Object which represents our HTTP-Request Parameters
 	let postData = {

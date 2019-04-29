@@ -30,7 +30,6 @@
 	<div class="container">
 		<h1>Dein Gästebuch!</h1>
 		<h3>Neuer Eintrag</h3>
-		<form method="post">
 			<div class="form-group">
 				<label for="poster">Dein Name:</label>
 				<input class="form-control" type="text" id="poster" name="poster" placeholder="Dein Name"/><br/>
@@ -45,8 +44,7 @@
 				<textarea class="form-control" id="entry" name="entry" placeholder="Dein text"></textarea><br/>
 			</div>
 			
-			<button class="btn btn-primary" type="submit">Eintragen!</button>
-		</form>
+			<button id="entry-button" class="btn btn-primary">Eintragen!</button>
 		<hr/>
 		
 		<h2>Gästebucheinträge <a href="javascript:void(0)" id="reload-button" class="btn btn-success">Reload</a></h2>
