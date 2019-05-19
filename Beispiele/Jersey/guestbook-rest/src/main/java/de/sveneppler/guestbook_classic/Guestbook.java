@@ -12,7 +12,9 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -55,6 +57,15 @@ public class Guestbook {
     	}
 		return entries;
 	}
+	
+	@GET
+	@Path("entries.json")
+	@Produces(MediaType.APPLICATION_JSON) // Tell Jersey we want to return JSON
+	public Response EntriesJSON() throws Exception {
+		Vector<EntryModel> entries = getGuestbookEntriesFromDatabase();
+		return Response.status(200).entity(entries).build();
+	}
+	
     
     @POST
     public Response AddEntry(@FormParam("poster") String poster, @FormParam("email") String email, @FormParam("entry") String entry) throws Exception {
