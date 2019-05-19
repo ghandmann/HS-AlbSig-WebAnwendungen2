@@ -162,10 +162,14 @@ function deleteEntry(clickEventArgs) {
 	
 	let entryId = clickedElement.attr("data-id");
 	
-	// Create JSON-Object for HTTP-Request
-	let deleteData = { id: entryId };
+	let deleteURL = "guestbook/entries/" + entryId;
 	
-	let deleteEntryPromise = $.get("guestbook/delete", deleteData);
+	// Send a HTTP DELETE request to the deleteURL
+	let deleteEntryPromise = $.ajax(deleteURL,
+		{
+			type: "delete",
+		}
+	);
 	
 	// Here we only define the lambda, the code is NOT run!
 	// The code gets executed by the promise done() function when the delete request succeeds.

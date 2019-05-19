@@ -9,10 +9,12 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -83,9 +85,9 @@ public class Guestbook {
 		return Response.ok().build();
     }
     
-    @GET
-    @Path("delete")
-    public Response DeleteEntry(@QueryParam("id") int id) throws Exception {
+    @DELETE
+    @Path("entries/{id}")
+    public Response DeleteEntry(@PathParam("id") int id) throws Exception {
     	Connection connection = getConnection();
     	Statement sth = connection.createStatement();
     	
