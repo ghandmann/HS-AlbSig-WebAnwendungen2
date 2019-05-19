@@ -23,55 +23,31 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Viewable;
 
 @Path("guestbook")
-public class Guestbook {
-
-	private Connection getConnection() throws Exception {
-    	// WTF, without this line, i get weird cannot find driver errors...
-    	Class.forName("org.sqlite.JDBC");
-    	
-    	// This only works for Linux people...
-    	// Change this path to the real location of the sample.db
-    	// See $repo/sql/ folder for create scripts
-    	String sqliteDatabasePath = "/tmp/sample.db";
-    	
-    	Connection connection = DriverManager.getConnection("jdbc:sqlite:" + sqliteDatabasePath);
-    	return connection;
-	}
-    
+public class Guestbook {    
     @GET
     public Viewable Template() throws Exception {
-    	Vector<EntryModel> entries = getGuestbookEntriesFromDatabase();
-    	
-    	Hashtable<String, Object> model = new Hashtable<String, Object>();
-    	model.put("entries", entries);
-    	
-    	return new Viewable("/guestbook", model);
+    	// This method is only here to deliver the base HTML
+    	// which then includes the needed client side javascript to fetch JSON data.
+    	return new Viewable("/guestbook");
     }
-
-	private Vector<EntryModel> getGuestbookEntriesFromDatabase() throws Exception {
-		Connection connection = getConnection();
-    	Statement sth = connection.createStatement();
-    	
-    	ResultSet rs = sth.executeQuery("SELECT * FROM Entries ORDER BY ROWID DESC");
-    	Vector<EntryModel> entries = new Vector<EntryModel>();
-    	while(rs.next()) {
-    		EntryModel entry = new EntryModel(rs.getInt("id"), rs.getString("poster"), rs.getString("email"), rs.getString("entry"));
-    		entries.add(entry);
-    	}
-		return entries;
-	}
 	
 	@GET
 	@Path("entries.json")
-	@Produces(MediaType.APPLICATION_JSON) // Tell Jersey we want to return JSON
+	// Tell Jersey we want to return JSON
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response EntriesJSON() throws Exception {
 		Vector<EntryModel> entries = getGuestbookEntriesFromDatabase();
+
+		// By setting our Vector<EntryModel> into the entity method
+		// Jersey now tries to convert our POJO (Plain Old Java Object) into JSON
 		return Response.status(200).entity(entries).build();
 	}
 	
     
     @POST
+    // Tell Jersey we expect JSON in the HTTP Body
     @Consumes(MediaType.APPLICATION_JSON)
+    // Jersey now tries to instantiate the needed EntryModel-Param based on the HTTP Body
     public Response AddEntry(EntryModel model) throws Exception {    	
     	Connection connection = getConnection();
     	Statement sth = connection.createStatement();
@@ -98,14 +74,29 @@ public class Guestbook {
     	
     }
     
-    @GET
-    @Path("entries.html")
-    public Viewable EntriesAsHtml() throws Exception {
-    	Vector<EntryModel> entries = getGuestbookEntriesFromDatabase();
+    // These two method are Database related
+	private Connection getConnection() throws Exception {
+    	// WTF, without this line, i get weird cannot find driver errors...
+    	Class.forName("org.sqlite.JDBC");
     	
-    	Hashtable<String, Object> model = new Hashtable<String, Object>();
-    	model.put("entries", entries);
+    	// This only works for Linux people...
+    	// Change this path to the real location of the sample.db
+    	// See $repo/sql/ folder for create scripts
+    	String sqliteDatabasePath = "/tmp/sample.db";
     	
-    	return new Viewable("/guestbookEntries", model);
-    }
+    	Connection connection = DriverManager.getConnection("jdbc:sqlite:" + sqliteDatabasePath);
+    	return connection;
+	}
+	private Vector<EntryModel> getGuestbookEntriesFromDatabase() throws Exception {
+		Connection connection = getConnection();
+    	Statement sth = connection.createStatement();
+    	
+    	ResultSet rs = sth.executeQuery("SELECT * FROM Entries ORDER BY ROWID DESC");
+    	Vector<EntryModel> entries = new Vector<EntryModel>();
+    	while(rs.next()) {
+    		EntryModel entry = new EntryModel(rs.getInt("id"), rs.getString("poster"), rs.getString("email"), rs.getString("entry"));
+    		entries.add(entry);
+    	}
+		return entries;
+	}
 }

@@ -33,10 +33,7 @@ function loadGuestbookEntries() {
 	console.log("Exited loadGuestbookEntries()");
 }
 
-// When jQuery calls this function via the promise, it provides 3 params:
-// 1) The Response-Body
-// 2) The HTTP-Status Text
-// 3) The XmlHttpRequest Object used to send the original request
+// Generate a client specific HTML representation of the received JSON
 function onGuestbookEntriesReady(fetchedJSON) {
 	let entryContainer = $("#entry-container");
 	entryContainer.empty();
@@ -83,14 +80,6 @@ function onGuestbookEntriesReady(fetchedJSON) {
 	  </div>
 	</div>
 	*/
-}
-
-// Add a click handler to all 'delete links' inside a gb entry
-function registerDeleteActions() {
-	// Find all delete links on the page
-	var allDeleteLinks = $("div#entry-container .entry a");
-	
-	allDeleteLinks.click(deleteEntry);
 }
 
 // When the 'fetchEntriesPromise' fails, jQuery calls this function.
