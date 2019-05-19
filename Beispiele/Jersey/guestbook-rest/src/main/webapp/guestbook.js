@@ -19,7 +19,7 @@ function loadGuestbookEntries() {
 	console.log("Called loadGuestbookEntries()");
 	// This is an async call which instantly returns a promise (aka deffered) object which represents the ongoing request
 	// https://learn.jquery.com/code-organization/deferreds/
-	let fetchEntriesPromise = $.get("guestbook/entries.html");
+	let fetchEntriesPromise = $.getJSON("guestbook/entries.json");
 	
 	// Tell jQuery to call the function 'onGuestbookEntriesReady' when the promise succeeded
 	fetchEntriesPromise.done(onGuestbookEntriesReady);
@@ -37,23 +37,52 @@ function loadGuestbookEntries() {
 // 1) The Response-Body
 // 2) The HTTP-Status Text
 // 3) The XmlHttpRequest Object used to send the original request
-function onGuestbookEntriesReady(fetchedHtml) {
-	console.log("Called onGuestbookEntriesReady()");
-	
-	// Get the div with the id=entry-container from the guestbook page
+function onGuestbookEntriesReady(fetchedJSON) {
 	let entryContainer = $("#entry-container");
-	
-	// Clear all child elements
 	entryContainer.empty();
 	
-	// Create a DOM Object of the received HTML string
-	let parsedEntriesDOM = $(fetchedHtml);
-	// Append the new DOM Object to the entryContainer
-	entryContainer.append(parsedEntriesDOM);
-	
-	registerDeleteActions();
-	
-	console.log("Exited onGuestbookEntriesReady()");
+	fetchedJSON.forEach((entry) => {
+		let entryCard = $("<div/>");
+		entryCard.addClass("card entry");
+		
+		let entryHeader = $("<div/>");
+		entryHeader.addClass("card-header text-white bg-secondary");
+		let entryHeaderContet = $("<strong>" + entry.poster + "</strong>");
+		entryHeader.append("Von ");
+		entryHeader.append(entryHeaderContet);
+		
+		let deleteEntryLink = $("<a>Eintrag löschen</a>");
+		deleteEntryLink.attr("href", "javascript:void(0)")
+		deleteEntryLink.attr("data-id", entry.id);
+		deleteEntryLink.addClass("float-right");
+		deleteEntryLink.click(deleteEntry);
+		
+		entryHeader.append(deleteEntryLink);
+		
+		entryCard.append(entryHeader);
+		
+		let entryBody = $("<div/>");
+		entryBody.addClass("card-body bg-dark text-white");
+		
+		let entryParagraph = $("<p>" + entry.entry + "</p>");
+		entryParagraph.addClass("card-text");
+		
+		entryBody.append(entryParagraph);
+		entryCard.append(entryBody);
+		
+		entryContainer.append(entryCard);
+	});
+	/* The above Javascript generates this HTML structure:
+	<div class="card entry">
+	  <div class="card-header text-white bg-secondary">
+	    Von <strong>${ entry.poster }</strong> (${ entry.email })
+	    <a href="javascript:void(0)" data-id="${ entry.id }" class="float-right">Eintrag Löschen</a>
+	  </div>
+	  <div class="card-body bg-dark text-white">
+	    <p class="card-text">${ entry.entry }</p>
+	  </div>
+	</div>
+	*/
 }
 
 // Add a click handler to all 'delete links' inside a gb entry
