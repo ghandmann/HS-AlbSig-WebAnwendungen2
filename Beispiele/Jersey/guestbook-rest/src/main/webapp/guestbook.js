@@ -126,8 +126,15 @@ function createEntry(e) {
 		entry: entryTextarea.val(),
 	};
 	
+	let postDataJsonString = JSON.stringify(postData);
+	
 	// Start an async HTTP-Post request, returning a promise
-	let createEntryPromise = $.post("guestbook", postData);
+	let createEntryPromise = $.ajax("guestbook",
+		{
+			data: postDataJsonString,
+			type: "POST",
+			contentType: "application/json",
+		});
 
 	// Call the function 'onCreateEntrySucceeded' if the HTTP-Request succeeds
 	createEntryPromise.done(onCreateEntrySucceeded);

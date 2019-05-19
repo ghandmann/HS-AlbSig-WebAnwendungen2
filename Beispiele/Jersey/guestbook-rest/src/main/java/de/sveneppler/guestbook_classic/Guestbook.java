@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -68,12 +69,13 @@ public class Guestbook {
 	
     
     @POST
-    public Response AddEntry(@FormParam("poster") String poster, @FormParam("email") String email, @FormParam("entry") String entry) throws Exception {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response AddEntry(EntryModel model) throws Exception {    	
     	Connection connection = getConnection();
     	Statement sth = connection.createStatement();
     	
     	// SQL Injection all the way :)
-    	String query = String.format("INSERT INTO Entries (poster, email, entry) VALUES (\"%s\", \"%s\", \"%s\");", poster, email, entry);
+    	String query = String.format("INSERT INTO Entries (poster, email, entry) VALUES (\"%s\", \"%s\", \"%s\");", model.poster, model.email, model.entry);
     	System.out.println("Sending Query=" + query);
     	sth.execute(query);
     	
