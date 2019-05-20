@@ -53,7 +53,12 @@ public class Guestbook {
     	Statement sth = connection.createStatement();
     	
     	// SQL Injection all the way :)
-    	String query = String.format("INSERT INTO Entries (poster, email, entry) VALUES (\"%s\", \"%s\", \"%s\");", model.poster, model.email, model.entry);
+    	String query = String.format(
+			"INSERT INTO Entries (poster, email, entry) VALUES (\"%s\", \"%s\", \"%s\");",
+			model.poster,
+			model.email,
+			model.entry
+    	);
     	System.out.println("Sending Query=" + query);
     	sth.execute(query);
     	
