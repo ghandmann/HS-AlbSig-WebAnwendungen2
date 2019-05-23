@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -23,9 +24,14 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Viewable;
 
 @Path("guestbook")
-public class Guestbook {    
+public class Guestbook {
+	
+	@Inject
+	private InMemoryWebsocketRegistry registry;
+	
     @GET
     public Viewable Template() throws Exception {
+    	System.out.println("Guestbook.java registry=" + registry);
     	// This method is only here to deliver the base HTML
     	// which then includes the needed client side javascript to fetch JSON data.
     	return new Viewable("/guestbook");

@@ -1,10 +1,14 @@
 package de.sveneppler.guestbook_classic;
 
 import javax.inject.Singleton;
+import javax.ws.rs.core.Application;
 
+import org.glassfish.hk2.api.Immediate;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
+
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
 
 public class AppConfig extends ResourceConfig {
 
@@ -17,8 +21,8 @@ public class AppConfig extends ResourceConfig {
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                //bind(InMemoryWebsocketRegistry.class).to(InMemoryWebsocketRegistry.class).in(Singleton.class);
-            	bindAsContract(InMemoryWebsocketRegistry.class);
+            	System.out.println("Websocket AbstractBinder() InPlace");
+            	bind(InMemoryWebsocketRegistry.class).to(InMemoryWebsocketRegistry.class).in(Singleton.class);
             }
         });
          

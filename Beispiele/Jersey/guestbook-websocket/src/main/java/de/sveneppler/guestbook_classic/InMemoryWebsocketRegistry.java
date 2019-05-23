@@ -2,7 +2,12 @@ package de.sveneppler.guestbook_classic;
 
 import java.util.HashMap;
 
+import javax.annotation.ManagedBean;
+import javax.annotation.Resource;
 import javax.websocket.Session;
+import javax.ws.rs.ApplicationPath;
+
+import org.glassfish.hk2.api.Immediate;
 
 public class InMemoryWebsocketRegistry {
 	HashMap<String, Session> WebSocketSessionsRgistry;
