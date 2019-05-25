@@ -40,36 +40,42 @@ function onGuestbookEntriesReady(fetchedJSON) {
 	entryContainer.empty();
 	
 	fetchedJSON.forEach((entry) => {
-		let entryCard = $("<div/>");
-		entryCard.addClass("card entry");
-		
-		let entryHeader = $("<div/>");
-		entryHeader.addClass("card-header text-white bg-secondary");
-		let entryHeaderContet = $("<strong>" + entry.poster + "</strong>");
-		entryHeader.append("Von ");
-		entryHeader.append(entryHeaderContet);
-		
-		let deleteEntryLink = $("<a>Eintrag löschen</a>");
-		deleteEntryLink.attr("href", "javascript:void(0)")
-		deleteEntryLink.attr("data-id", entry.id);
-		deleteEntryLink.addClass("float-right");
-		deleteEntryLink.click(deleteEntry);
-		
-		entryHeader.append(deleteEntryLink);
-		
-		entryCard.append(entryHeader);
-		
-		let entryBody = $("<div/>");
-		entryBody.addClass("card-body bg-dark text-white");
-		
-		let entryParagraph = $("<p>" + entry.entry + "</p>");
-		entryParagraph.addClass("card-text");
-		
-		entryBody.append(entryParagraph);
-		entryCard.append(entryBody);
-		
-		entryContainer.append(entryCard);
+		let newEntry = renderEntry(entry);
+		entryContainer.append(newEntry);
 	});
+}
+
+function renderEntry(entry) {
+	let entryCard = $("<div/>");
+	entryCard.addClass("card entry");
+	
+	let entryHeader = $("<div/>");
+	entryHeader.addClass("card-header text-white bg-secondary");
+	let entryHeaderContet = $("<strong>" + entry.poster + "</strong>");
+	entryHeader.append("Von ");
+	entryHeader.append(entryHeaderContet);
+	
+	let deleteEntryLink = $("<a>Eintrag löschen</a>");
+	deleteEntryLink.attr("href", "javascript:void(0)")
+	deleteEntryLink.attr("data-id", entry.id);
+	deleteEntryLink.addClass("float-right");
+	deleteEntryLink.click(deleteEntry);
+	
+	entryHeader.append(deleteEntryLink);
+	
+	entryCard.append(entryHeader);
+	
+	let entryBody = $("<div/>");
+	entryBody.addClass("card-body bg-dark text-white");
+	
+	let entryParagraph = $("<p>" + entry.entry + "</p>");
+	entryParagraph.addClass("card-text");
+	
+	entryBody.append(entryParagraph);
+	entryCard.append(entryBody);
+	
+	return entryCard;
+	
 	/* The above Javascript generates this HTML structure:
 	<div class="card entry">
 	  <div class="card-header text-white bg-secondary">
