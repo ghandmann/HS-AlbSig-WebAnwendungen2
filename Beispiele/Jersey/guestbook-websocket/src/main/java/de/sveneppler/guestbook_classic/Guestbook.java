@@ -25,13 +25,14 @@ import org.glassfish.jersey.server.mvc.Viewable;
 
 @Path("guestbook")
 public class Guestbook {
-	
-	@Inject
 	private InMemoryWebsocketRegistry registry;
 	
+	public Guestbook() {
+		registry = InMemoryWebsocketRegistry.GetInstance();
+	}
+	
     @GET
-    public Viewable Template() throws Exception {
-    	System.out.println("Guestbook.java registry=" + registry);
+    public Viewable Template() throws Exception {    	
     	// This method is only here to deliver the base HTML
     	// which then includes the needed client side javascript to fetch JSON data.
     	return new Viewable("/guestbook");
