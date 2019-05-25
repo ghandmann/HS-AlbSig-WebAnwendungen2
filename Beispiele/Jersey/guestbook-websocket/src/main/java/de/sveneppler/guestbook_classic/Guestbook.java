@@ -74,6 +74,13 @@ public class Guestbook {
     	
     	System.out.println("OK  Poster=\" + poster + \"; Email=\" + email + \"; Entry=\" + entry");
     	
+    	// After the insert we need to ask the database for the
+    	// newly inserted ID of the new row
+    	String newEntryIdQuery = "SELECT last_insert_rowid()";
+    	ResultSet newEntryIdResult = sth.executeQuery(newEntryIdQuery);
+    	int newEntryId = newEntryIdResult.getInt(1);
+    	model.id = newEntryId;
+    	
     	// Broadcast the information to all connected clients
     	NewEntryMessage msg = new NewEntryMessage();
     	msg.setNewEntry(model);

@@ -167,26 +167,21 @@ function deleteEntry(clickEventArgs) {
 		}
 	);
 	
-	// Here we only define the lambda, the code is NOT run!
-	// The code gets executed by the promise done() function when the delete request succeeds.
-	let entryDeletedLambda = () => {
-		// Traverse the DOM-Tree upwards, until we find a div-tag with the class 'entry'
-		let parentDiv = clickedElement.parents("div.entry");
-		
-		// Nested Lambda. After the Entry has been faded out, remove it from the DOM.
-		let fadeOutFinished = () => {
-			parentDiv.remove();
-		}
-		
-		// FadeOut the parent div element, afterwards call 'fadeOutFinished'
-		parentDiv.fadeOut(300, fadeOutFinished);
-	};
-	
-	// Call the 'entryDeletedLambda' when the promise succeeds
-	deleteEntryPromise.done(entryDeletedLambda);
-	
 	// Inline lambda example for promises
 	deleteEntryPromise.fail(() => alert("Failed to delete entry!"));
+}
+
+function removeEntryFromDOM(entryId) {
+	let deleteLink = $("a[data-id='" + entryId + "']");
+	let parentDiv = deleteLink.parents("div.entry");
+	
+	// Nested Lambda. After the Entry has been faded out, remove it from the DOM.
+	let fadeOutFinished = () => {
+		parentDiv.remove();
+	}
+	
+	// FadeOut the parent div element, afterwards call 'fadeOutFinished'
+	parentDiv.fadeOut(300, fadeOutFinished);
 }
 
 function openWebsocket() {
@@ -204,6 +199,28 @@ function openWebsocket() {
 	});
 	
 	ws.addEventListener('message', (msgEvent) => {
-		console.log("Websocket received message: " + msgEvent.data);
+		let msg = msgEvent.data;
+		console.log("Websocket received message: " + msg);
+		handleWebsocketMessage(msg);
 	});
+}
+
+function handleWebsocketMessage(jsonMessage) {
+	let message = JSON.parse(jsonMessage);
+	
+	// Check if the message object has a type property
+	if("type" in message) {
+		if(message.type == "NewEntryMessage") {
+			console.log("* Received NewEntryMessage prepending new entry.")
+			// Crate the HTML-DOM elements for the new entry
+			let newEntry = renderEntry(message.newEntry);
+			// Inject the entry into the #entry-container div
+			$("#entry-container").prepend(newEntry);
+		}
+		else if(message.type == "EntryDeletedMessage") {
+			console.log("* Received EntryDeletedMessage removing entry.")
+			// Server informed us, that the entry has been deleted, so we remove it.
+			removeEntryFromDOM(message.deletedEntryId);
+		}
+	}
 }
