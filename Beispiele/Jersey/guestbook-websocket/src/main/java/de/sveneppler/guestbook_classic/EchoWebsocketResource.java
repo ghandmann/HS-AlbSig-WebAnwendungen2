@@ -38,14 +38,5 @@ public class EchoWebsocketResource {
 	public void onOpen(Session session) {
 		registry.Add(session);
 		System.out.println("WebSocket new SessionID=" + session.getId() + "; There are now " + registry.Count() + " Connections");
-		
-		try {
-			// Greet the new client
-			session.getBasicRemote().sendText("Welcome!");
-		}
-		catch(Exception ex) {
-			System.out.println("WebSocket: Failed to send text!");
-		}
-		
 	}
 }
