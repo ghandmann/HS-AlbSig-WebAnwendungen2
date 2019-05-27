@@ -40,36 +40,42 @@ function onGuestbookEntriesReady(fetchedJSON) {
 	entryContainer.empty();
 	
 	fetchedJSON.forEach((entry) => {
-		let entryCard = $("<div/>");
-		entryCard.addClass("card entry");
-		
-		let entryHeader = $("<div/>");
-		entryHeader.addClass("card-header text-white bg-secondary");
-		let entryHeaderContet = $("<strong>" + entry.poster + "</strong>");
-		entryHeader.append("Von ");
-		entryHeader.append(entryHeaderContet);
-		
-		let deleteEntryLink = $("<a>Eintrag löschen</a>");
-		deleteEntryLink.attr("href", "javascript:void(0)")
-		deleteEntryLink.attr("data-id", entry.id);
-		deleteEntryLink.addClass("float-right");
-		deleteEntryLink.click(deleteEntry);
-		
-		entryHeader.append(deleteEntryLink);
-		
-		entryCard.append(entryHeader);
-		
-		let entryBody = $("<div/>");
-		entryBody.addClass("card-body bg-dark text-white");
-		
-		let entryParagraph = $("<p>" + entry.entry + "</p>");
-		entryParagraph.addClass("card-text");
-		
-		entryBody.append(entryParagraph);
-		entryCard.append(entryBody);
-		
-		entryContainer.append(entryCard);
+		let newEntry = renderEntry(entry);
+		entryContainer.append(newEntry);
 	});
+}
+
+function renderEntry(entry) {
+	let entryCard = $("<div/>");
+	entryCard.addClass("card entry");
+	
+	let entryHeader = $("<div/>");
+	entryHeader.addClass("card-header text-white bg-secondary");
+	let entryHeaderContet = $("<strong>" + entry.poster + "</strong>");
+	entryHeader.append("Von ");
+	entryHeader.append(entryHeaderContet);
+	
+	let deleteEntryLink = $("<a>Eintrag löschen</a>");
+	deleteEntryLink.attr("href", "javascript:void(0)")
+	deleteEntryLink.attr("data-id", entry.id);
+	deleteEntryLink.addClass("float-right");
+	deleteEntryLink.click(deleteEntry);
+	
+	entryHeader.append(deleteEntryLink);
+	
+	entryCard.append(entryHeader);
+	
+	let entryBody = $("<div/>");
+	entryBody.addClass("card-body bg-dark text-white");
+	
+	let entryParagraph = $("<p>" + entry.entry + "</p>");
+	entryParagraph.addClass("card-text");
+	
+	entryBody.append(entryParagraph);
+	entryCard.append(entryBody);
+	
+	return entryCard;
+	
 	/* The above Javascript generates this HTML structure:
 	<div class="card entry">
 	  <div class="card-header text-white bg-secondary">
@@ -161,26 +167,21 @@ function deleteEntry(clickEventArgs) {
 		}
 	);
 	
-	// Here we only define the lambda, the code is NOT run!
-	// The code gets executed by the promise done() function when the delete request succeeds.
-	let entryDeletedLambda = () => {
-		// Traverse the DOM-Tree upwards, until we find a div-tag with the class 'entry'
-		let parentDiv = clickedElement.parents("div.entry");
-		
-		// Nested Lambda. After the Entry has been faded out, remove it from the DOM.
-		let fadeOutFinished = () => {
-			parentDiv.remove();
-		}
-		
-		// FadeOut the parent div element, afterwards call 'fadeOutFinished'
-		parentDiv.fadeOut(300, fadeOutFinished);
-	};
-	
-	// Call the 'entryDeletedLambda' when the promise succeeds
-	deleteEntryPromise.done(entryDeletedLambda);
-	
 	// Inline lambda example for promises
 	deleteEntryPromise.fail(() => alert("Failed to delete entry!"));
+}
+
+function removeEntryFromDOM(entryId) {
+	let deleteLink = $("a[data-id='" + entryId + "']");
+	let parentDiv = deleteLink.parents("div.entry");
+	
+	// Nested Lambda. After the Entry has been faded out, remove it from the DOM.
+	let fadeOutFinished = () => {
+		parentDiv.remove();
+	}
+	
+	// FadeOut the parent div element, afterwards call 'fadeOutFinished'
+	parentDiv.fadeOut(300, fadeOutFinished);
 }
 
 function openWebsocket() {
@@ -198,6 +199,28 @@ function openWebsocket() {
 	});
 	
 	ws.addEventListener('message', (msgEvent) => {
-		console.log("Websocket received message: " + msgEvent.data);
+		let msg = msgEvent.data;
+		console.log("Websocket received message: " + msg);
+		handleWebsocketMessage(msg);
 	});
+}
+
+function handleWebsocketMessage(jsonMessage) {
+	let message = JSON.parse(jsonMessage);
+	
+	// Check if the message object has a type property
+	if("type" in message) {
+		if(message.type == "NewEntryMessage") {
+			console.log("* Received NewEntryMessage prepending new entry.")
+			// Crate the HTML-DOM elements for the new entry
+			let newEntry = renderEntry(message.newEntry);
+			// Inject the entry into the #entry-container div
+			$("#entry-container").prepend(newEntry);
+		}
+		else if(message.type == "EntryDeletedMessage") {
+			console.log("* Received EntryDeletedMessage removing entry.")
+			// Server informed us, that the entry has been deleted, so we remove it.
+			removeEntryFromDOM(message.deletedEntryId);
+		}
+	}
 }

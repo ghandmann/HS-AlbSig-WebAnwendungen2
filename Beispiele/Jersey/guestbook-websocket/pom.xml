@@ -51,6 +51,10 @@
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
         <dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-json-jackson</artifactId>
+		</dependency>
+        <dependency>
         	<groupId>org.glassfish.jersey.ext</groupId>
         	<artifactId>jersey-mvc-jsp</artifactId>
         </dependency>

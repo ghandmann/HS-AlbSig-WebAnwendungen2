@@ -15,16 +15,6 @@ public class AppConfig extends ResourceConfig {
     public AppConfig() {
         packages("de.sveneppler");
         property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF");
-        register(JspMvcFeature.class);
-        
-        register(InMemoryWebsocketRegistry.class);
-        register(new AbstractBinder() {
-            @Override
-            protected void configure() {
-            	System.out.println("Websocket AbstractBinder() InPlace");
-            	bind(InMemoryWebsocketRegistry.class).to(InMemoryWebsocketRegistry.class).in(Singleton.class);
-            }
-        });
-         
+        register(JspMvcFeature.class); 
     }
 }

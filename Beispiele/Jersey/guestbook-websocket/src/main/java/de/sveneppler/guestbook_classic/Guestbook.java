@@ -23,15 +23,19 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 @Path("guestbook")
 public class Guestbook {
-	
-	@Inject
 	private InMemoryWebsocketRegistry registry;
 	
+	public Guestbook() {
+		registry = InMemoryWebsocketRegistry.GetInstance();
+	}
+	
     @GET
-    public Viewable Template() throws Exception {
-    	System.out.println("Guestbook.java registry=" + registry);
+    public Viewable Template() throws Exception {    	
     	// This method is only here to deliver the base HTML
     	// which then includes the needed client side javascript to fetch JSON data.
     	return new Viewable("/guestbook");
@@ -69,6 +73,19 @@ public class Guestbook {
     	sth.execute(query);
     	
     	System.out.println("OK  Poster=\" + poster + \"; Email=\" + email + \"; Entry=\" + entry");
+    	
+    	// After the insert we need to ask the database for the
+    	// newly inserted ID of the new row
+    	String newEntryIdQuery = "SELECT last_insert_rowid()";
+    	ResultSet newEntryIdResult = sth.executeQuery(newEntryIdQuery);
+    	int newEntryId = newEntryIdResult.getInt(1);
+    	model.id = newEntryId;
+    	
+    	// Broadcast the information to all connected clients
+    	NewEntryMessage msg = new NewEntryMessage();
+    	msg.setNewEntry(model);
+    	registry.BroadcastMessage(msg);
+    	
 		return Response.ok().build();
     }
     
@@ -79,6 +96,11 @@ public class Guestbook {
     	Statement sth = connection.createStatement();
     	
     	sth.execute("DELETE FROM Entries WHERE ROWID = " + id);
+    	
+    	// Broadcast the information to all connected clients
+    	EntryDeletedMessage msg = new EntryDeletedMessage();
+    	msg.setDeletedEntryId(id);
+    	registry.BroadcastMessage(msg);
     	
     	URI redirectURI = new URI("/guestbook-websocket/webapi/guestbook");
 		return Response.seeOther(redirectURI).build();
