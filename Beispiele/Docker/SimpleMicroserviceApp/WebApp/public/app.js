@@ -1,6 +1,13 @@
 $(() => {
     startWebSocket();
     $("#sendBtn").click(sendMessage);
+
+    $("input[name='message']").on('keypress',(e) => {
+        // RETURN keycode
+        if(e.which == 13) {
+            sendMessage();
+        }
+    });
 });
 
 function sendMessage() {
