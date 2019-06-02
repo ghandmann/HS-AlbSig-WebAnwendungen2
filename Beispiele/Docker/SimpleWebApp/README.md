@@ -18,7 +18,7 @@ $ docker build -t hochschule/simple-web-app .
 Running the `docker run` command will start up a container on your system.
 
 ```
-docker run --rm -P hochschule/simple-web-app
+$ docker run --rm -P hochschule/simple-web-app
 ```
 
 You can stop the container by hitting `ctrl+c`.
@@ -41,7 +41,7 @@ The `PORTS` column is telling you, on which port the container is listening. In 
 Running the `docker run` command will start up a container on your system.
 
 ```
-docker run --rm -p 4711:3000 hochschule/simple-web-app
+$ docker run --rm -p 4711:3000 hochschule/simple-web-app
 ```
 
 With the statement `-p 4711:3000` you tell docker to forward local traffic on port `4711` into the container on port `3000`.
@@ -53,7 +53,7 @@ You can stop the container by hitting `ctrl+c`.
 Simply use the `docker rmi` command:
 
 ```
-docker rmi hochschule/simple-web-app
+$ docker rmi hochschule/simple-web-app
 ```
 
 Images can only be deleted, if there are no more containers using it. With the `-f` option deletion can be forced.
