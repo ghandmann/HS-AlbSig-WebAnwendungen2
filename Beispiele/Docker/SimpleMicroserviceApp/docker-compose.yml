@@ -1,4 +1,4 @@
-version: "3.0"
+version: "2.2"
 services: 
   web-app:
     build:
@@ -11,7 +11,6 @@ services:
       - nickname-filter-service
     ports:
       - 8080:3000
-    # TODO remove volumes
     volumes:
       - ./WebApp/:/opt/
   message-filter-service:
@@ -20,7 +19,7 @@ services:
     image: demo/message-filter-service
     depends_on: 
       - postgres
-    # TODO remove volumes
+    scale: 2
     volumes:
       - ./MessageFilterService/:/opt/
   nickname-filter-service:
@@ -30,7 +29,7 @@ services:
     depends_on: 
       - postgres
       - redis
-    # TODO remove volumes
+    scale: 2
     volumes:
       - ./NicknameFilterService/:/opt/
   postgres:
