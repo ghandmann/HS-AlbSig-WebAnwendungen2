@@ -41,6 +41,12 @@ This is the Publish-Subscribe-Backend used by the `WebApp`, `MessageFilterServic
 
 This is the PostgreSQL Server used by `WebApp`, `MessageFilterService` and `NicknameFilterService` to forward jobs via a `Job Queue`.
 
+## Requirements
+
+You need to install:
+- Docker v18+
+- docker-compose v1.17+
+
 ## Running the example
 
 The whole application stack can be started with:
