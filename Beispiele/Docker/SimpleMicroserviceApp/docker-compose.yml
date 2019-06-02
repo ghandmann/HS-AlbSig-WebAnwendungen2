@@ -1,0 +1,21 @@
+version: "3.0"
+services: 
+  web-app:
+    build:
+      context: ./WebApp/
+    image: demo/web-app
+    depends_on: 
+      - redis
+      - postgres
+    ports:
+      - 8080:3000
+    # TODO remove volumes
+    volumes:
+      - ./WebApp/:/opt/
+  postgres:
+    image: postgres:alpine
+    environment: 
+      POSTGRES_PASSWORD: ZTonmqNDYedo
+  redis:
+    image: redis:alpine
+    
