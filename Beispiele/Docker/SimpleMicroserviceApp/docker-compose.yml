@@ -7,11 +7,32 @@ services:
     depends_on: 
       - redis
       - postgres
+      - message-filter-service
+      - nickname-filter-service
     ports:
       - 8080:3000
     # TODO remove volumes
     volumes:
       - ./WebApp/:/opt/
+  message-filter-service:
+    build:
+      context: ./MessageFilterService/
+    image: demo/message-filter-service
+    depends_on: 
+      - postgres
+    # TODO remove volumes
+    volumes:
+      - ./MessageFilterService/:/opt/
+  nickname-filter-service:
+    build:
+      context: ./NicknameFilterService/
+    image: demo/nickname-filter-service
+    depends_on: 
+      - postgres
+      - redis
+    # TODO remove volumes
+    volumes:
+      - ./NicknameFilterService/:/opt/
   postgres:
     image: postgres:alpine
     environment: 
