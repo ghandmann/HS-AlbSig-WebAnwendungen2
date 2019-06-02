@@ -2,7 +2,7 @@ FROM perl:5.30
 
 RUN cpanm Mojolicious Mojo::Pg Mojo::Redis Minion
 
-COPY WebApp.pl /opt/WebApp.pl
+COPY . /opt/
 
 EXPOSE 3000
 
