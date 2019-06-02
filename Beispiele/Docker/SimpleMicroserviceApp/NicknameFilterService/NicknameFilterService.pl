@@ -27,7 +27,7 @@ app->minion->add_task("filter-nickname" => sub {
   my $pubsub = $redis->pubsub;
 
   # Publish the message in the chatroom.
-  $pubsub->notify("chatroom", "hallo");
+  $pubsub->notify("chatroom", j($data))->wait;
 
   $job->finish;
 });
