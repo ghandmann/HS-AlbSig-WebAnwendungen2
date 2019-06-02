@@ -55,4 +55,6 @@ The whole application stack can be started with:
 $ docker-compose up
 ```
 
+By default, the app is available via `http://localhost:8080`.
+
 This will build the docker-containes and bring them up as needed. The application can then be stopped with `CTRL+C`.
