@@ -12,7 +12,7 @@ my $redis = Mojo::Redis->new("redis://redis:6379/");
 
 app->minion->add_task("filter-nickname" => sub {
   my ($job, $data) = @_;
-  $job->app->log->info("Received new job! With msg=" . $data->{nickname});
+  $job->app->log->info("Received new job! With msg=" . j($data));
 
   my @blackListedNicknames = ("bill", "gates", "steve", "ballmer");
 

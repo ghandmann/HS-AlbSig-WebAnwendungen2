@@ -1,0 +1,18 @@
+#messageBox {
+    background-color: #dedede;
+    padding: 10px;
+    border: solid black 1px;
+}
+
+span.nickname {
+    font-weight: bold;
+    color: blue;
+}
+
+span.nickname:after {
+    content: ":"
+}
+
+span.message {
+    padding-left: 5px;
+}

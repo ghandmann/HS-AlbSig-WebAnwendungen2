@@ -7,7 +7,7 @@ plugin Minion => {Pg => 'postgresql://postgres:ZTonmqNDYedo@postgres/postgres'};
 
 app->minion->add_task("filter-message" => sub {
   my ($job, $data) = @_;
-  $job->app->log->info("Received new job! With msg=" . $data->{message});
+  $job->app->log->info("Received new job! With msg=" . j($data));
 
   my @blackListedWords = ("microsoft", "windows", "outlook");
 

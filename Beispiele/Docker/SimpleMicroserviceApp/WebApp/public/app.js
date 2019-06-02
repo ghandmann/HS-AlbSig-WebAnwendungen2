@@ -4,8 +4,12 @@ $(() => {
 });
 
 function sendMessage() {
-    let nickname = $("input[name='nickname']").first().val();
-    let message = $("input[name='message']").first().val();
+    let nicknameInput = $("input[name='nickname']").first();
+    let nickname = nicknameInput.val();
+
+    let messageInput = $("input[name='message']").first();
+    let message = messageInput.val();
+    messageInput.val("");
 
     let data = {
         message: message,
