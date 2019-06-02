@@ -5,6 +5,9 @@ use Mojo::Pg::Migrations;
 use Mojo::Redis;
 use Mojo::JSON qw/j/;
 
+plugin Minion => {Pg => 'postgresql://postgres:ZTonmqNDYedo@postgres/postgres'};
+plugin 'Minion::Admin';
+
 my $pg = Mojo::Pg->new('postgresql://postgres:ZTonmqNDYedo@postgres/postgres');
 my $migrations = Mojo::Pg::Migrations->new($pg);
 $migrations->from_data;
@@ -21,8 +24,7 @@ post '/message' => sub {
   my $c = shift;
   my $data = $c->req->json;
 
-  my $pubsub = $redis->pubsub;
-  $pubsub->notify("chatroom", j($data));
+  $c->minion->enqueue("filter-message", [$data]);
 
   $c->render(text => "OK");
 };
@@ -39,7 +41,7 @@ websocket '/updates' => sub {
 
   $c->on("finish" => sub {
     # Websocket connection went away, close the Publish-Subscribe-Connection
-    $pubsub->connection->close;
+    $pubsub->connection->disconnect;
   });
 
   # Don't autoclose this connection
@@ -57,6 +59,7 @@ __DATA__
 <input type="text" name="nickname" placeholder="Pick a nickname" />
 <input type="text" name="message" placeholder="Write a message" />
 <a id="sendBtn" class="btn btn-primary">Submit</a>
+<div id="messageBox"></div>
 
 
 @@ layouts/default.html.ep

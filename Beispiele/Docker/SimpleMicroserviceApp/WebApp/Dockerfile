@@ -1,8 +1,8 @@
 FROM perl:5.30
 
-COPY WebApp.pl /opt/WebApp.pl
+RUN cpanm Mojolicious Mojo::Pg Mojo::Redis Minion
 
-RUN cpanm Mojolicious Mojo::Pg Mojo::Redis
+COPY WebApp.pl /opt/WebApp.pl
 
 EXPOSE 3000
 

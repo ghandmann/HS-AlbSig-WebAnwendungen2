@@ -29,7 +29,32 @@ function startWebSocket() {
     ws.onclose = () => console.log("WebSocket connection closed");
     ws.onerror = () => console.log("WebSocket connection error");
     ws.onmessage = (eventData) => {
-        let message = eventData.data;
-        console.log("WebSocket Message: " + message);
+        let json = eventData.data;
+        console.log("WebSocket Message: " + json);
+
+        let messageObject = JSON.parse(json);
+        prependMessage(messageObject);
     };
+}
+
+
+function prependMessage(messageObject) {
+    let nickname = messageObject.nickname;
+    let message = messageObject.message;
+
+    let nickSpan = $("<span/>");
+    nickSpan.append(nickname);
+    nickSpan.addClass("nickname");
+    
+    let msgSpan = $("<span/>");
+    msgSpan.append(message);
+    msgSpan.addClass("message");
+
+    let divWrapper = $("<div/>");
+    divWrapper.addClass("messageWrapper");
+
+    divWrapper.append(nickSpan);
+    divWrapper.append(msgSpan);
+
+    $("#messageBox").prepend(divWrapper);
 }
