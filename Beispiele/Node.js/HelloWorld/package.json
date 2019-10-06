@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "my-script": "echo Output of my-script"
+    "my-script": "echo Output of my-script"
   },
   "author": "Sven Eppler",
   "license": "ISC"
