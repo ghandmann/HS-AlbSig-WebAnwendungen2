@@ -7,11 +7,18 @@
 
   <script src="javascripts/jquery-3.4.1.min.js" defer></script>
   <script src="bootstrap-4.3.1/js/bootstrap.min.js" defer></script>
+  <script src="javascripts/guestbookClient.js" defer></script>
 </head>
 
 <body>
   <h1>GuestbookAPI Frontend</h1>
-  <p>This page left blank intentionally</p>
+  <div>
+    <button id="reloadEntries" class="btn btn-primary">Einträge laden</button>
+  </div>
+  
+  <div id="guestbookEntriesContainer">
+    <!-- The guestbook entries will be rendered here -->
+  </div>
 </body>
 
 </html>

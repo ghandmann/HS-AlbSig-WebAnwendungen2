@@ -17,7 +17,7 @@ router.post('/', (req, res, next) => {
         id: nextId++,
         name: "Sven Epler",
         date: new Date().toISOString(),
-        entry: "Hallo Welt! Das ist ein Gästebucheintrag."
+        text: "Hallo Welt! Das ist ein Gästebucheintrag."
     };
 
     inMemoryGuestbookStore.push(guestbookEnty);
