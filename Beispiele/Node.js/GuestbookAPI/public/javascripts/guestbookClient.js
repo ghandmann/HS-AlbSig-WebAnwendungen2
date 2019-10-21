@@ -1,7 +1,9 @@
 // Shorthand function for $(document).ready(...);
 $(async () => {
     // When the "reloadEntries" button is clicked, fetch the guestbook entries
-    $("#reloadEntries").click(() => loadGuestbookEntries());
+    $("#reloadEntries").click(async () => await loadGuestbookEntries());
+
+    $('#createEntryButton').click(async () => await createNewGuestbookEntry());
 
     // when the page is done loading, fetch the guestbook entries
     await loadGuestbookEntries();
@@ -54,6 +56,44 @@ function renderEntry(entry) {
     card.append(cardBody);
 
     return card;
+}
+
+async function createNewGuestbookEntry() {
+    const newEntryModal = $('#newEntryModal');
+    const newEntryForm = $('form', newEntryModal).first();
+
+    const nameInput = $('input[name="name"]', newEntryForm);
+    const textInput = $('textarea[name="text"]', newEntryForm);
+
+    const newEntry = {
+        name: nameInput.val(),
+        text: textInput.val(),
+    };
+
+    // Send the new entry via HTTP POST to the API
+    var response = await fetch('/api/v1', {
+        method: "POST",
+        headers: {
+                "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEntry),
+    });
+
+    // In case something went wrong, show an error
+    if(response.status != 200) {
+        showError("Failed to create new Guestbook entry!");
+        return;
+    }
+
+    // Reset the input fields
+    textInput.val("");
+    nameInput.val("");
+
+    // Reload entries to show the new one.
+    await loadGuestbookEntries();
+
+    // Hide the newEntryModal
+    newEntryModal.modal("hide");
 }
 
 function showError(msg, exception) {

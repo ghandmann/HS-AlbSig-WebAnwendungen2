@@ -13,11 +13,13 @@ router.get('/', (req, res, next) => {
 
 // Add a new entry to the guestbook
 router.post('/', (req, res, next) => {
+    const postData = req.body;
+    
     const guestbookEnty = {
         id: nextId++,
-        name: "Sven Epler",
+        name: postData.name,
         date: new Date().toISOString(),
-        text: "Hallo Welt! Das ist ein Gästebucheintrag."
+        text: postData.text,
     };
 
     inMemoryGuestbookStore.push(guestbookEnty);
