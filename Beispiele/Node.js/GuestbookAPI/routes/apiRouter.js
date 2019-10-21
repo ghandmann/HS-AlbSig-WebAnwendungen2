@@ -28,8 +28,9 @@ router.post('/', (req, res, next) => {
 
 // Delete an entry from the guestbook
 router.delete('/:id', (req, res, next) => {
+    // filter out the entry, which matches the given id
     inMemoryGuestbookStore = inMemoryGuestbookStore.filter((entry) => {
-        if(entry.id != req.param["id"]) {
+        if(entry.id != req.params["id"]) {
             return entry;
         }
     });

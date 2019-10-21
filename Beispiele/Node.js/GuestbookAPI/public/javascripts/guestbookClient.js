@@ -43,12 +43,17 @@ function renderGuestbookEntries(entries) {
         const newEntry = renderEntry(entry);
         entriesContainer.append(newEntry);
     });
+
+    $(".delete-button", entriesContainer).click(async (clickedButtonEvent) => deleteEntry(clickedButtonEvent));
 }
 
 function renderEntry(entry) {
     const card = $('<div class="card"/>');
     const cardHeader = $('<div class="card-header" />');
     cardHeader.text("Eintrag #" + entry.id + " von " + entry.name + " am " + entry.date);
+    const deleteButton = $('<button data-id="' + entry.id + '" class="btn btn-sm btn-danger float-right delete-button">Löschen</button>');
+    cardHeader.append(deleteButton);
+
     card.append(cardHeader);
 
     const cardBody = $('<div class="card-body" />');
@@ -94,6 +99,26 @@ async function createNewGuestbookEntry() {
 
     // Hide the newEntryModal
     newEntryModal.modal("hide");
+}
+
+async function deleteEntry(clickedButtonEvent) {
+    const clickedButton = $(clickedButtonEvent.currentTarget);
+    const entryIdToDelete = clickedButton.attr("data-id");
+
+    const response = await fetch("/api/v1/" + entryIdToDelete, {
+        method: "DELETE",
+    });
+
+    if(response.status != 200) {
+        showError("Failed to delete Guestbook entry with id=" + entryIdToDelete);
+        return;
+    }
+
+    // Traverse the DOM upwards starting from the clickedButton element until
+    // we find a element with the class "card"
+    const entryCard = clickedButton.parents(".card");
+    // Remove the card.
+    entryCard.remove();
 }
 
 function showError(msg, exception) {
