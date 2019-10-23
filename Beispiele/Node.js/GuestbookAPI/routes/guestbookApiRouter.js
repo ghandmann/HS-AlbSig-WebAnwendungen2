@@ -1,40 +1,52 @@
 var express = require('express');
 var router = express.Router();
 
-// create a simple in-memory gustbook
+// Represent the guestbook as a simple in-memory array
+// consiting of guestbook entry objects
 var inMemoryGuestbookStore = [];
-// ceate a simple id sequence
-var nextId = 1;
+
+// Since every entry needs an ID, simply use an in-memory counter
+var nextEntryId = 1;
 
 // Return JSON array of entries
 router.get('/', (req, res, next) => {
-  res.send(inMemoryGuestbookStore);
+    // Just return the in-memory guestbook array, express middleware
+    // takes care of JSON serialization
+    res.send(inMemoryGuestbookStore);
 });
 
 // Add a new entry to the guestbook
+// The HTTP POST body looks like: { "name": "Your name", "text": "Your text" }
 router.post('/', (req, res, next) => {
+    // Retrieve the posted JSON from the request
     const postData = req.body;
     
+    // Create a new guestbookEntry
     const guestbookEnty = {
-        id: nextId++,
+        id: nextEntryId++,
         name: postData.name,
         date: new Date().toISOString(),
         text: postData.text,
     };
 
+    // Push the entry object into the inMemory guestbook array
     inMemoryGuestbookStore.push(guestbookEnty);
+
+    // Respond with 200 OK
     res.sendStatus(200);
 });
 
 // Delete an entry from the guestbook
 router.delete('/:id', (req, res, next) => {
-    // filter out the entry, which matches the given id
+    // .filter() returns only the entries of the in-memory guestbook array
+    // with an ID different from the one to the HTTP DELETE request
     inMemoryGuestbookStore = inMemoryGuestbookStore.filter((entry) => {
         if(entry.id != req.params["id"]) {
             return entry;
         }
     });
 
+    // Respond with 200 OK
     res.sendStatus(200);
 });
 
