@@ -40,14 +40,22 @@ router.post('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     // .filter() returns only the entries of the in-memory guestbook array
     // with an ID different from the one to the HTTP DELETE request
-    inMemoryGuestbookStore = inMemoryGuestbookStore.filter((entry) => {
+    let filterResult = inMemoryGuestbookStore.filter((entry) => {
         if(entry.id != req.params["id"]) {
             return entry;
         }
     });
 
-    // Respond with 200 OK
-    res.sendStatus(200);
+    // No entry filtered out, so the id was invalid
+    if(filterResult.length == inMemoryGuestbookStore.length) {
+        res.sendStatus(404);
+    }
+    else {
+        inMemoryGuestbookStore = filterResult
+
+        // Respond with 200 OK
+        res.sendStatus(200);
+    }
 });
 
 module.exports = router;
