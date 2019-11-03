@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const { check, validationResult } = require('express-validator');
 
 // Represent the guestbook as a simple in-memory array
 // consiting of guestbook entry objects
@@ -17,45 +18,69 @@ router.get('/entries', (req, res, next) => {
 
 // Add a new entry to the guestbook
 // The HTTP POST body looks like: { "name": "Your name", "text": "Your text" }
-router.post('/entries', (req, res, next) => {
-    // Retrieve the posted JSON from the request
-    const postData = req.body;
-    
-    // Create a new guestbookEntry
-    const guestbookEnty = {
-        id: nextEntryId++,
-        name: postData.name,
-        date: new Date().toISOString(),
-        text: postData.text,
-    };
-
-    // Push the entry object into the inMemory guestbook array
-    inMemoryGuestbookStore.push(guestbookEnty);
-
-    // Respond with 200 OK
-    res.sendStatus(200);
-});
-
-// Delete an entry from the guestbook
-router.delete('/entries/:id', (req, res, next) => {
-    // .filter() returns only the entries of the in-memory guestbook array
-    // with an ID different from the one to the HTTP DELETE request
-    let filterResult = inMemoryGuestbookStore.filter((entry) => {
-        if(entry.id != req.params["id"]) {
-            return entry;
+router.post(
+    '/entries',
+    // Inject validation middlewares which run before our action
+    [
+        check("name").not().isEmpty(),
+        check("text").not().isEmpty(),
+    ],
+    // Our action code
+    (req, res, next) => {
+        // Validate the request with express-validator
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
-    });
 
-    // No entry filtered out, so the id was invalid
-    if(filterResult.length == inMemoryGuestbookStore.length) {
-        res.sendStatus(404);
-    }
-    else {
-        inMemoryGuestbookStore = filterResult
+        // Retrieve the posted JSON from the request
+        const postData = req.body;
+        
+        // Create a new guestbookEntry
+        const guestbookEnty = {
+            id: nextEntryId++,
+            name: postData.name,
+            date: new Date().toISOString(),
+            text: postData.text,
+        };
+
+        // Push the entry object into the inMemory guestbook array
+        inMemoryGuestbookStore.push(guestbookEnty);
 
         // Respond with 200 OK
         res.sendStatus(200);
-    }
+});
+
+// Delete an entry from the guestbook
+router.delete(
+    '/entries/:id',
+    [
+        check("id").isInt({ gt: 0 })
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(400).json( { errors: errors.array() } );
+        }
+
+        // .filter() returns only the entries of the in-memory guestbook array
+        // with an ID different from the one to the HTTP DELETE request
+        let filterResult = inMemoryGuestbookStore.filter((entry) => {
+            if(entry.id != req.params["id"]) {
+                return entry;
+            }
+        });
+
+        // No entry filtered out, so the id was invalid
+        if(filterResult.length == inMemoryGuestbookStore.length) {
+            res.sendStatus(404);
+        }
+        else {
+            inMemoryGuestbookStore = filterResult
+
+            // Respond with 200 OK
+            res.sendStatus(200);
+        }
 });
 
 module.exports = router;
