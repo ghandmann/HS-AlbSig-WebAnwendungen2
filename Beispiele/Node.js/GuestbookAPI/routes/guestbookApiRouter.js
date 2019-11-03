@@ -9,7 +9,7 @@ var inMemoryGuestbookStore = [];
 var nextEntryId = 1;
 
 // Return JSON array of entries
-router.get('/', (req, res, next) => {
+router.get('/entries', (req, res, next) => {
     // Just return the in-memory guestbook array, express middleware
     // takes care of JSON serialization
     res.send(inMemoryGuestbookStore);
@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
 
 // Add a new entry to the guestbook
 // The HTTP POST body looks like: { "name": "Your name", "text": "Your text" }
-router.post('/', (req, res, next) => {
+router.post('/entries', (req, res, next) => {
     // Retrieve the posted JSON from the request
     const postData = req.body;
     
@@ -37,7 +37,7 @@ router.post('/', (req, res, next) => {
 });
 
 // Delete an entry from the guestbook
-router.delete('/:id', (req, res, next) => {
+router.delete('/entries/:id', (req, res, next) => {
     // .filter() returns only the entries of the in-memory guestbook array
     // with an ID different from the one to the HTTP DELETE request
     let filterResult = inMemoryGuestbookStore.filter((entry) => {

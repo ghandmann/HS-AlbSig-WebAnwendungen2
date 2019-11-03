@@ -18,7 +18,7 @@
                 }
             }
         },
-        "/api/v1": {
+        "/api/v1/entries": {
             "get": {
                 "tags": ["Guestbook API v1"],
                 "summary": "Get all guestbook entries",
@@ -63,7 +63,7 @@
                 }
             }
         },
-        "/api/v1/{id}": {
+        "/api/v1/entries/{id}": {
             "delete": {
                 "tags": ["Guestbook API v1"],
                 "summary": "Delete a guestbook entry",
