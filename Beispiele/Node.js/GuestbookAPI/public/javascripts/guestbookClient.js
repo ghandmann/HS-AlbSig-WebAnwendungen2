@@ -12,7 +12,7 @@ $(async () => {
 async function loadGuestbookEntries() {
     let entries = undefined;
     try {
-        const response = await fetch("/api/v1/");
+        const response = await fetch("/api/v1/entries");
         entries = await response.json();
     }
     catch(exception) {
@@ -57,7 +57,8 @@ function renderEntry(entry) {
     card.append(cardHeader);
 
     const cardBody = $('<div class="card-body" />');
-    cardBody.text(entry.text);
+    // This allows HTML Injection! Demo purpose only! Better use .text()!
+    cardBody.html(entry.text);
     card.append(cardBody);
 
     return card;
@@ -76,7 +77,7 @@ async function createNewGuestbookEntry() {
     };
 
     // Send the new entry via HTTP POST to the API
-    var response = await fetch('/api/v1', {
+    var response = await fetch('/api/v1/entries', {
         method: "POST",
         headers: {
                 "Content-Type": "application/json",
@@ -105,7 +106,7 @@ async function deleteEntry(clickedButtonEvent) {
     const clickedButton = $(clickedButtonEvent.currentTarget);
     const entryIdToDelete = clickedButton.attr("data-id");
 
-    const response = await fetch("/api/v1/" + entryIdToDelete, {
+    const response = await fetch("/api/v1/entries/" + entryIdToDelete, {
         method: "DELETE",
     });
 
