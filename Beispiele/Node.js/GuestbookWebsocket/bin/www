@@ -19,7 +19,9 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+ // Fix incompatibility between express-generator and express-ws
+ // https://github.com/HenningM/express-ws/issues/104
+var server = app;
 
 /**
  * Listen on provided port, on all network interfaces.
