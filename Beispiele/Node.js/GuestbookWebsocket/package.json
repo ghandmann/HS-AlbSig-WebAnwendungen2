@@ -10,6 +10,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-validator": "6.2.0",
+    "express-ws": "^4.0.0",
     "morgan": "~1.9.1",
     "swagger-ui-dist": "^3.24.0"
   }
