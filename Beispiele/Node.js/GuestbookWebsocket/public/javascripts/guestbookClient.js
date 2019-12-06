@@ -1,3 +1,5 @@
+let webSocket = null;
+
 // Shorthand function for $(document).ready(...);
 $(async () => {
     // When the "reloadEntries" button is clicked, fetch the guestbook entries
@@ -5,9 +7,60 @@ $(async () => {
 
     $('#createEntryButton').click(async () => await createNewGuestbookEntry());
 
+    $('#reconnect-websocket').click(() => connectWebsocket());
+
     // when the page is done loading, fetch the guestbook entries
     await loadGuestbookEntries();
+
+    connectWebsocket();
 });
+
+function connectWebsocket() {
+    const url = "ws://localhost:3000/ws/live-updates";
+    // Connect to the WebSocket Endpoint
+    webSocket = new WebSocket(url);
+
+    // Wire up required event handlers:
+    // Handle connection established
+    webSocket.onopen = () => {
+        console.log("[WebSocket] Connection established");
+        $("#websocket-error-message").addClass("d-none");
+    };
+
+    // Handle incoming messages
+    webSocket.onmessage = (messageEvent) => {
+        console.log("[WebSocket] Received message:", messageEvent);
+        handleWebSocketMessage(messageEvent);
+    };
+
+    const showWebSocketError = () => {
+        $("#websocket-error-message").removeClass("d-none");
+    };
+
+    // Handle connection closed by server
+    webSocket.onclose = () => {
+        console.log("[WebSocket] Connection closed");
+        showWebSocketError();
+    };
+
+    // Handle errors like network failures, etc.
+    webSocket.onerror = (errorEvent) => {
+        console.log("[WebSocket] Error: ", errorEvent);
+        showWebSocketError();
+    };
+}
+
+function handleWebSocketMessage(messageEvent) {
+    var receivedData = messageEvent.data;
+    var message = JSON.parse(receivedData);
+
+    if(message.type == "EntryCreated") {
+        console.log("Handling EntryCreated message");
+    }
+    else if(message.type == "EntryDeleted") {
+        console.log("Handling EntryDeleted message");
+    }
+}
 
 async function loadGuestbookEntries() {
     let entries = undefined;
