@@ -27,7 +27,7 @@ const routerFactory = function factory(websocketServer) {
     const broadcastEntryDeleted = (entryId) => {
         const broadcastMessage = JSON.stringify(
             {
-                type: "EntyDeleted",
+                type: "EntryDeleted",
                 id: entryId,
             }
         );
