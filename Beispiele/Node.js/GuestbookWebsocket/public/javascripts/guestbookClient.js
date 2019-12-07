@@ -95,7 +95,9 @@ async function loadGuestbookEntries() {
         return;
     };
 
-    renderGuestbookEntries(entries);
+    localGuestbookStore = entries;
+
+    renderGuestbookEntries(localGuestbookStore);
 }
 
 function renderGuestbookEntries(entries) {
