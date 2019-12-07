@@ -22,7 +22,7 @@ You can visit the guestbook via it's included HTML5 frontend on http://localhost
 
 The project includes a Swagger-UI Documentation on http://localhost:3000/swagger.html
 
-## Major changes to GuestbookAI Project
+## Major changes to GuestbookAPI Project
 
 ### Server Side
 The Server now makes use of the node module `express-ws` to provide a new WebSocket endpoint via `/ws/live-updates`.
