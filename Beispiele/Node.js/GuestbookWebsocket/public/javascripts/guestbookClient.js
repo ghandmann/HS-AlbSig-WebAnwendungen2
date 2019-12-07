@@ -1,4 +1,7 @@
+// Application global variable to keep the websocket reference
 let webSocket = null;
+// Application global variable to keep all the local guestbook entries
+let localGuestbookStore = [];
 
 // Shorthand function for $(document).ready(...);
 $(async () => {
@@ -51,14 +54,33 @@ function connectWebsocket() {
 }
 
 function handleWebSocketMessage(messageEvent) {
+    // Get the payload from the receieved event
     var receivedData = messageEvent.data;
+    // Parse the payload as JSON
     var message = JSON.parse(receivedData);
 
     if(message.type == "EntryCreated") {
         console.log("Handling EntryCreated message");
+        // Get the entry object from the message
+        var newEntry = message.createdEntry;
+        // Insert the new entry into our local version of the guestbook tore
+        localGuestbookStore.push(newEntry);
+        // Render the local guestbook tore
+        renderGuestbookEntries(localGuestbookStore);
     }
     else if(message.type == "EntryDeleted") {
         console.log("Handling EntryDeleted message");
+        // Remove the deleted entry from our local guestbook tore
+        localGuestbookStore = localGuestbookStore.filter(
+            (entryCandidate) => entryCandidate.id != message.deletedEntryId
+        );
+
+        // Render the local guestbook store
+        renderGuestbookEntries(localGuestbookStore);
+    }
+    else {
+        // Fallback in case something unexpected happens
+        console.log("Received an unknown message.type=" + message.type + "; Dropping message.");
     }
 }
 
@@ -96,15 +118,14 @@ function renderGuestbookEntries(entries) {
         const newEntry = renderEntry(entry);
         entriesContainer.append(newEntry);
     });
-
-    $(".delete-button", entriesContainer).click(async (clickedButtonEvent) => deleteEntry(clickedButtonEvent));
 }
 
 function renderEntry(entry) {
-    const card = $('<div class="card"/>');
+    const card = $('<div class="card" id="' + entry.id + '"/>');
     const cardHeader = $('<div class="card-header" />');
     cardHeader.text("Eintrag #" + entry.id + " von " + entry.name + " am " + entry.date);
     const deleteButton = $('<button data-id="' + entry.id + '" class="btn btn-sm btn-danger float-right delete-button">Löschen</button>');
+    deleteButton.click(async (clickedButtonEvent) => deleteEntry(clickedButtonEvent));
     cardHeader.append(deleteButton);
 
     card.append(cardHeader);
@@ -148,9 +169,6 @@ async function createNewGuestbookEntry() {
     textInput.val("");
     nameInput.val("");
 
-    // Reload entries to show the new one.
-    await loadGuestbookEntries();
-
     // Hide the newEntryModal
     newEntryModal.modal("hide");
 }
@@ -167,12 +185,6 @@ async function deleteEntry(clickedButtonEvent) {
         showError("Failed to delete Guestbook entry with id=" + entryIdToDelete);
         return;
     }
-
-    // Traverse the DOM upwards starting from the clickedButton element until
-    // we find a element with the class "card"
-    const entryCard = clickedButton.parents(".card");
-    // Remove the card.
-    entryCard.remove();
 }
 
 function showError(msg, exception) {

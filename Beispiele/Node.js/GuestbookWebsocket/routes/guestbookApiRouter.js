@@ -17,7 +17,7 @@ const routerFactory = function factory(websocketServer) {
         const broadcastMessage = JSON.stringify(
             {
                 type: "EntryCreated",
-                message: guestbookEntry,
+                createdEntry: guestbookEntry,
             }
         );
 
@@ -28,7 +28,7 @@ const routerFactory = function factory(websocketServer) {
         const broadcastMessage = JSON.stringify(
             {
                 type: "EntryDeleted",
-                id: entryId,
+                deletedEntryId: entryId,
             }
         );
 
