@@ -1,0 +1,14 @@
+{
+  "name": "imagefingerprintservice",
+  "version": "1.0.0",
+  "description": "Create Fingerprints of Images",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sven Epler <sven@sveneppler.de>",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.5"
+  }
+}
