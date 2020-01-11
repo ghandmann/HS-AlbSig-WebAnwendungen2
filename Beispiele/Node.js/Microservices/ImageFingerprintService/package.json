@@ -4,7 +4,9 @@
   "description": "Create Fingerprints of Images",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+
   },
   "author": "Sven Epler <sven@sveneppler.de>",
   "license": "ISC",
