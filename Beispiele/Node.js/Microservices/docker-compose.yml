@@ -1,5 +1,39 @@
 version: "3.0"
+environment: 
+    RABBITMQ_HOST: rabbitmq
 services:
+    image-web-api:
+        build:
+            context: ./WebApi/
+        image: ghandmann/hs-albsig/images-web-api
+        ports: 
+            - 3000:3000
+        depends_on: 
+            - rabbitmq
+    image-validation-service:
+        build:
+            context: ./ImageValidationService/
+        image: ghandmann/hs-albsig/image-validation-service
+        depends_on: 
+            - rabbitmq
+    image-watermark-service:
+        build:
+            context: ./ImageWatermarkService/
+        image: ghandmann/hs-albsig/image-watermark-service
+        depends_on: 
+            - rabbitmq
+    image-fingerprint-service:
+        build:
+            context: ./ImageFingerprintService/
+        image: ghandmann/hs-albsig/image-fingerprint-service
+        depends_on: 
+            - rabbitmq
+    image-housekeeper-service:
+        build:
+            context: ./ImageHousekeeper/
+        image: ghandmann/hs-albsig/image-housekeeper-service
+        depends_on: 
+            - rabbitmq
     rabbitmq:
         image: rabbitmq:3.8.2-management-alpine
         ports: 
