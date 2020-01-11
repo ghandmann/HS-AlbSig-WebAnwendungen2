@@ -4,6 +4,8 @@ services:
         build:
             context: ./WebApi/
         image: ghandmann/hs-albsig/images-web-api
+        volumes: 
+            - "image-storage:/tmp/shared/"
         ports: 
             - 3000:3000
         depends_on: 
@@ -15,6 +17,8 @@ services:
         build:
             context: ./ImageValidationService/
         image: ghandmann/hs-albsig/image-validation-service
+        volumes: 
+            - "image-storage:/tmp/shared/"
         depends_on: 
             - rabbitmq
         environment: 
@@ -24,6 +28,8 @@ services:
         build:
             context: ./ImageWatermarkService/
         image: ghandmann/hs-albsig/image-watermark-service
+        volumes: 
+            - "image-storage:/tmp/shared/"
         depends_on: 
             - rabbitmq
         environment: 
@@ -33,6 +39,8 @@ services:
         build:
             context: ./ImageFingerprintService/
         image: ghandmann/hs-albsig/image-fingerprint-service
+        volumes:
+            - "image-storage:/tmp/shared/"
         depends_on: 
             - rabbitmq
         environment: 
@@ -42,6 +50,8 @@ services:
         build:
             context: ./ImageHousekeeper/
         image: ghandmann/hs-albsig/image-housekeeper-service
+        volumes: 
+            - "image-storage:/tmp/shared/"
         depends_on: 
             - rabbitmq
         environment: 
@@ -52,3 +62,5 @@ services:
         ports: 
             - "5672:5672"
             - "15672:15672"
+volumes:
+    image-storage:
