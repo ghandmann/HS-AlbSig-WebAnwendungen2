@@ -35,8 +35,8 @@ amqp.connect('amqp://localhost', function(connectError, connection) {
     });
 });
 
-function finalizeImageUpload(inconmingMessage, channel) {
-    const rawJson = inconmingMessage.content.toString();
+function finalizeImageUpload(incomingMessage, channel) {
+    const rawJson = incomingMessage.content.toString();
     console.log(" [x] Received raw message=%s", rawJson);
     const msg = JSON.parse(rawJson);
     console.log(" [x] Moving imageId='" + msg.imageId + "' into done folder");
