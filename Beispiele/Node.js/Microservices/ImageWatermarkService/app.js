@@ -7,7 +7,7 @@ const incomingQueue = 'ImageWatermark';
 const doneQueue = 'ImageReady';
 const uploadFailedQueue = 'ImageFailed';
 
-amqp.connect('amqp://localhost', function(connectError, connection) {
+amqp.connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'), function(connectError, connection) {
     if (connectError) {
         throw connectError;
     }

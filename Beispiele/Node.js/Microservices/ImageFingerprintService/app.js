@@ -7,7 +7,7 @@ console.log(" [*] ImageFingerprintService starting...");
 const incomingQueue = 'ImageFingerprint';
 const watermarkQueue = 'ImageWatermark';
 
-amqp.connect('amqp://localhost', function(connectError, connection) {
+amqp.connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'), function(connectError, connection) {
     if (connectError) {
         throw connectError;
     }

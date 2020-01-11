@@ -6,7 +6,7 @@ console.log(" [*] ImageHouskeeper service starting...");
 const uploadFinishedQueue = 'ImageReady';
 const uploadFailedQueue = 'ImageFailed';
 
-amqp.connect('amqp://localhost', function(connectError, connection) {
+amqp.connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'), function(connectError, connection) {
     if (connectError) {
         throw connectError;
     }

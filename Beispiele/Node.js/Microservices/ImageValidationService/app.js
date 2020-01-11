@@ -8,7 +8,7 @@ const incomingQueue = 'ImageUploaded';
 const fingerprintQueue = 'ImageFingerprint';
 const uploadFailedQueue = 'ImageFailed';
 
-amqp.connect('amqp://localhost', function(connectError, connection) {
+amqp.connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'), function(connectError, connection) {
     if (connectError) {
         throw connectError;
     }

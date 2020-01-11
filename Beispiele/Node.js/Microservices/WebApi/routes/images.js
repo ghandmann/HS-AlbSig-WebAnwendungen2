@@ -6,7 +6,7 @@ const fs = require('fs');
 let channel = null;
 const storageBasePath = '/tmp/shared';
 
-const rabbitMq = require('amqplib').connect('amqp://localhost')
+const rabbitMq = require('amqplib').connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'))
     .then(conn => conn.createChannel())
     .then((ch) => channel = ch);
 
