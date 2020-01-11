@@ -1,6 +1,4 @@
 version: "3.0"
-environment: 
-    RABBITMQ_HOST: rabbitmq
 services:
     image-web-api:
         build:
@@ -10,30 +8,45 @@ services:
             - 3000:3000
         depends_on: 
             - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
     image-validation-service:
         build:
             context: ./ImageValidationService/
         image: ghandmann/hs-albsig/image-validation-service
         depends_on: 
             - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
     image-watermark-service:
         build:
             context: ./ImageWatermarkService/
         image: ghandmann/hs-albsig/image-watermark-service
         depends_on: 
             - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
     image-fingerprint-service:
         build:
             context: ./ImageFingerprintService/
         image: ghandmann/hs-albsig/image-fingerprint-service
         depends_on: 
             - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
     image-housekeeper-service:
         build:
             context: ./ImageHousekeeper/
         image: ghandmann/hs-albsig/image-housekeeper-service
         depends_on: 
             - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
     rabbitmq:
         image: rabbitmq:3.8.2-management-alpine
         ports: 
