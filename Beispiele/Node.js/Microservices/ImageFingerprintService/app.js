@@ -1,9 +1,11 @@
 var amqp = require('amqplib/callback_api');
+const crypto = require('crypto');
+const fs = require('fs');
 
 console.log(" [*] ImageFingerprintService starting...");
 
 const incomingQueue = 'ImageFingerprint';
-const validateQueue = "ImageWatermark";
+const watermarkQueue = 'ImageWatermark';
 
 amqp.connect('amqp://localhost', function(connectError, connection) {
     if (connectError) {
@@ -18,7 +20,7 @@ amqp.connect('amqp://localhost', function(connectError, connection) {
             durable: false
         });
 
-        channel.assertQueue(validateQueue, {
+        channel.assertQueue(watermarkQueue, {
             durable: false,
         });
 
@@ -30,14 +32,29 @@ amqp.connect('amqp://localhost', function(connectError, connection) {
     });
 });
 
-function createImageFingerprint(msg, channel) {
-    console.log(" [x] Received raw message=%s", msg.content.toString());
-    console.log(" [x] Generating image fingerprint...");
+function createImageFingerprint(incomingMessage, channel) {
+    const rawJson = incomingMessage.content.toString();
+    console.log(" [x] Received raw message=%s",rawJson);
+    const msg = JSON.parse(rawJson);
+
+    console.log(" [x] Generating fingerprint for imageId='" + msg.imageId + "'");
 
     // Artificiall delay processing of the message by using a timeout
     setTimeout(() => {
-        const fingerprint = "My-Magic-Fingerprint";
-        console.log(" [x] Generated fingerpint=" + fingerprint);
-        channel.sendToQueue(validateQueue, Buffer.from("Validate the image!"));
-    }, 100);
+        const hasher = crypto.createHash('sha256');
+        const readStream = fs.createReadStream(msg.uploadDestination);
+        readStream.on('readable', () => {
+            const fileContet = readStream.read();
+            if(fileContet) {
+                hasher.update(fileContet);
+            }
+            else {
+                const fingerprint = hasher.digest("hex");
+                console.log(" [x] Generated fingerpint='" + fingerprint + "' for imageId='" + msg.imageId + "'");
+                msg.fingerprint = fingerprint;
+                channel.sendToQueue(watermarkQueue, Buffer.from(JSON.stringify(msg)));
+            }
+        });
+        
+    }, 1000);
 }
