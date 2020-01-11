@@ -8,7 +8,10 @@ const storageBasePath = '/tmp/shared';
 
 const rabbitMq = require('amqplib').connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'))
     .then(conn => conn.createChannel())
-    .then((ch) => channel = ch);
+    .then((ch) => {
+        ch.assertQueue("ImageUploaded", { durable: false });
+        channel = ch;
+    });
 
 /* GET home page. */
 router.get('/:imageId', (req, res) => {
