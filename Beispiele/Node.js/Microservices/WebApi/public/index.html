@@ -1,13 +1,19 @@
 <html>
 
 <head>
-  <title>Express</title>
+  <title>Image Microservice Example</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
+  <h1>Image Microservice Example</h1>
+  <h2>Upload a Image</h2>
+  <form method="post" enctype="multipart/form-data" action="images/upload">
+    <label>Choose an image...
+      <input name="datei" type="file" size="50" accept="text/*"> 
+    </label> 
+    <button>Upload</button>
+  </form>
 </body>
 
 </html>
