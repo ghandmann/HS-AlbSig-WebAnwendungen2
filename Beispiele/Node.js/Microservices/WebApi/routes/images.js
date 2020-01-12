@@ -6,17 +6,17 @@ const fs = require('fs');
 let channel = null;
 const storageBasePath = '/tmp/shared';
 
+const mimeTypeLookup = {
+    JPEG: "image/jpg",
+    PNG: "image/png",
+};
+
 const rabbitMq = require('amqplib').connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'))
     .then(conn => conn.createChannel())
     .then((ch) => {
         ch.assertQueue("ImageUploaded", { durable: false });
         channel = ch;
     });
-
-/* GET home page. */
-router.get('/:imageId', (req, res) => {
-  res.send("Images");
-});
 
 router.post('/upload', (req, res) => {
     // Pipe the request-stream into the busboy requsest parser
@@ -30,7 +30,7 @@ router.post('/upload', (req, res) => {
         
         const uploadDestination = storageBasePath + '/in-flight/' + newImageId;
         const fstream = fs.createWriteStream(uploadDestination);
-        file.pipe(fstream);
+        file.pipe(fstream);     
 
         fstream.on('close', () => {
             console.log(" * File upload of '" + filename + "' done, uploadDestination='" + uploadDestination + "'");
@@ -43,6 +43,28 @@ router.post('/upload', (req, res) => {
     req.busboy.on('finish', () => {
         res.sendStatus(200);
     })
+});
+
+router.get("/:imageId", async (req, res) => {
+    const imageId = req.params.imageId;
+    const imagePath = '/tmp/shared/done/' + imageId;
+
+    // Check if the image acutally exists
+    try {
+        await fs.promises.stat(imagePath);
+    }
+    catch(ex) {
+        return res.sendStatus(404);
+    }
+
+    // Read the metadata from disk
+    const metaPath = imagePath + '.meta.json';
+    var metadata = JSON.parse(await fs.promises.readFile(metaPath));
+
+    // Set correct Content-Type header
+    res.type(mimeTypeLookup[metadata.format]);
+    // Send back the bytes
+    res.sendFile(imagePath);
 });
 
 function publishImageUploadedEvent(imageId, uploadDestination) {
