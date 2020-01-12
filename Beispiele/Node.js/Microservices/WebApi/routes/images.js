@@ -18,6 +18,16 @@ const rabbitMq = require('amqplib').connect('amqp://' + (process.env.RABBITMQ_HO
         channel = ch;
     });
 
+// List all uploaded images
+router.get('/', async (req, res) => {
+    const doneFolder = '/tmp/shared/done';
+    const files = await fs.promises.readdir(doneFolder);
+
+    const imageIds = files.filter((f) => f.endsWith(".meta.json")).map((f) => f.substr(0, 36));
+
+    res.send(JSON.stringify(imageIds));
+});
+
 router.post('/upload', (req, res) => {
     // Pipe the request-stream into the busboy requsest parser
     req.pipe(req.busboy);
