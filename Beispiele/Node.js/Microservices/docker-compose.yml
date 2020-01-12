@@ -1,0 +1,66 @@
+version: "3.0"
+services:
+    image-web-api:
+        build:
+            context: ./WebApi/
+        image: ghandmann/hs-albsig/images-web-api
+        volumes: 
+            - "image-storage:/tmp/shared/"
+        ports: 
+            - 3000:3000
+        depends_on: 
+            - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
+    image-validation-service:
+        build:
+            context: ./ImageValidationService/
+        image: ghandmann/hs-albsig/image-validation-service
+        volumes: 
+            - "image-storage:/tmp/shared/"
+        depends_on: 
+            - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
+    image-watermark-service:
+        build:
+            context: ./ImageWatermarkService/
+        image: ghandmann/hs-albsig/image-watermark-service
+        volumes: 
+            - "image-storage:/tmp/shared/"
+        depends_on: 
+            - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
+    image-fingerprint-service:
+        build:
+            context: ./ImageFingerprintService/
+        image: ghandmann/hs-albsig/image-fingerprint-service
+        volumes:
+            - "image-storage:/tmp/shared/"
+        depends_on: 
+            - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
+    image-housekeeper-service:
+        build:
+            context: ./ImageHousekeeper/
+        image: ghandmann/hs-albsig/image-housekeeper-service
+        volumes: 
+            - "image-storage:/tmp/shared/"
+        depends_on: 
+            - rabbitmq
+        environment: 
+            RABBITMQ_HOST: rabbitmq
+        command: ./wait-for rabbitmq:5672 -- npm start
+    rabbitmq:
+        image: rabbitmq:3.8.2-management-alpine
+        ports: 
+            - "5672:5672"
+            - "15672:15672"
+volumes:
+    image-storage:

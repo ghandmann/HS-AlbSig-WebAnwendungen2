@@ -1,0 +1,26 @@
+<html>
+
+<head>
+  <title>Image Microservice Example</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <script lang="javascript" src="/client.js"></script>
+</head>
+
+<body>
+  <h1>Image Microservice Example</h1>
+  <h2>Upload a Image</h2>
+  <form method="post" enctype="multipart/form-data" action="images/upload">
+    <label>Choose an image...
+      <input name="datei" type="file" size="50" accept="text/*"> 
+    </label> 
+    <button>Upload</button>
+  </form>
+  <h2>File Listing <button id="reload-file-listing">Reload</button></h2>
+  <ul id="file-listing"></ul>
+</body>
+
+</html>
