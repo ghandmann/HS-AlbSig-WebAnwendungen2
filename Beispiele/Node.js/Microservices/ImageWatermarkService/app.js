@@ -30,13 +30,13 @@ amqp.connect('amqp://' + (process.env.RABBITMQ_HOST || 'localhost'), function(co
 
         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", incomingQueue);
 
-        channel.consume(incomingQueue, (msg) => createImageFingerprint(msg, channel), {
+        channel.consume(incomingQueue, (msg) => createWatermark(msg, channel), {
             noAck: true
         });
     });
 });
 
-function createImageFingerprint(inconmingMessage, channel) {
+function createWatermark(inconmingMessage, channel) {
     const rawJson = inconmingMessage.content.toString();
     console.log(" [x] Received raw message=%s", rawJson);
     const msg = JSON.parse(rawJson);
