@@ -66,7 +66,7 @@ const routerFactory = function factory(websocketServer) {
             const postData = req.body;
             
             // Create a new guestbookEntry
-            const guestbookEnty = {
+            const guestbookEntry = {
                 id: nextEntryId++,
                 name: postData.name,
                 date: new Date().toISOString(),
@@ -74,9 +74,9 @@ const routerFactory = function factory(websocketServer) {
             };
 
             // Push the entry object into the inMemory guestbook array
-            inMemoryGuestbookStore.push(guestbookEnty);
+            inMemoryGuestbookStore.push(guestbookEntry);
 
-            broadcastEntryCreated(guestbookEnty);
+            broadcastEntryCreated(guestbookEntry);
 
             // Respond with 200 OK
             res.sendStatus(200);
