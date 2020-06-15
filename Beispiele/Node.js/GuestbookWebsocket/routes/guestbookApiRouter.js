@@ -2,10 +2,6 @@ var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator');
 
-function broadcastMessageViaWebSocket(websocketServer, message) {
-    websocketServer.C
-}
-
 const routerFactory = function factory(websocketServer) {
     const broadcastMessageViaWebSocket = (broadcastMessage) => {
         websocketServer.clients.forEach((websocketClient) => {
