@@ -78,7 +78,7 @@ router.delete(
             res.sendStatus(404);
         }
         else {
-            inMemoryGuestbookStore = filterResult
+            inMemoryGuestbookStore = filterResult;
 
             // Respond with 200 OK
             res.sendStatus(200);
