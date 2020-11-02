@@ -63,10 +63,12 @@ router.delete(
             return res.status(400).json( { errors: errors.array() } );
         }
 
+        const idToDelete = req.params["id"];
+
         // .filter() returns only the entries of the in-memory guestbook array
         // with an ID different from the one to the HTTP DELETE request
         let filterResult = inMemoryGuestbookStore.filter((entry) => {
-            if(entry.id != req.params["id"]) {
+            if(entry.id != idToDelete) {
                 return entry;
             }
         });
