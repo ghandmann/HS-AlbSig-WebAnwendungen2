@@ -4,7 +4,7 @@ For this example you need to install docker on your machine. See the [getting st
 
 This document should give a quick guidance to reproduce the demo from the lecture.
 
-## Building the container
+## Building the image
 
 Running the `docker build` command will create a new image on your system.
 
