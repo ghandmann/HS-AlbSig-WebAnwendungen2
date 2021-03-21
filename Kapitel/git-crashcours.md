@@ -247,3 +247,43 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
    * Irgendwann kommt der erste merge-conflict, keine angst! Stellen Sie sich der Herausforderunge
    * git ist nicht für den Inhalt verantwortlich: Wenn Sie den code nicht verstehen, dann kann Ihnen git auch nicht helfen! Und am Ende müssen sie entscheiden: Ist der commit/merge gut oder nicht?
 * Wenns gar nicht mehr weiter geht: Fragen Sie mich einfach, sofern ich Zeit habe, schaue ich auch gerne kurz remote mit drauf.
+
+## Live Demo
+1) Create a empty repository in a new folder
+1) Create a new Express-API (`npx express --no-view` && `npm install`)
+1) Show output of `git status`
+1) Add and Commit `README.md` as a good initial commit
+1) Add and Commit `.gitignore` from GitHub, check output of `git status` again
+1) Show repository with `git log` and `gitg`
+1) Add and Commit the result of express app generator
+1) Create remote repository at GitHub
+1) Add remote to existing local repository with `git remote` (as pointed out on the GitHub page)
+1) Push local changes to `origin`, explain `tracking`
+1) View push-result on GitHub
+1) Create two new Issues at GitHub:
+   1) "Implement an echo endpoint"
+   1) "Implement a current time endpoint"
+1) Start a Pull-Request on the first Issue
+1) Start working locally on the first Issue
+1) Repeat last two steps for second issue
+1) Show state of the repository with two feature branches
+1) Merge the first Pull-Request
+1) Merge the second Pull-Request
+1) Show how the local `main`-branch is now "out of sync"
+1) Re-Sync with fast-forward pull
+1) Create a "diverged" state
+   1) Create a new Commit on `main` with GitHub
+   1) Create a new Commit on `main` locally
+   1) Run `git push`
+   1) Run `git status`
+   1) Resolve with `git pull --rebase`
+1) Create a merge conflict
+   1) Create a new branch `rename-echo-endpoint`, rename endpoint to `RenamedEchoEndpoint`
+   1) Create a commit on `main`, rename echo-Endpoint to `AlsoRenamedEchoEndpoint`
+   1) Try to merge branch `rename-echo-endpoint` into  `main`
+   1) Check `git status` output
+   1) Show `conflict markers`
+   1) Show VSCode mergin abilities
+   1) Show `git mergetool`
+   1) Abort merge with `git merge --abort`
+   1) Re-Merge with conflict, then resolve conflict
