@@ -35,7 +35,7 @@ Die "Working-Copy" ist für Git die aktuell "ausgecheckte" Version an dem der Be
 
 Da bei Git "alles nur Dateien" sind, sind in einem Repository auch immer alle Versionen vorhanden. Lediglich eine Version kann als "Working-Copy" aktuell editiert werden.
 
-Sonderfall "dirty working copy": Eine "schmutzige" Working-Copy ist ein spezieller Zustand bei dem eine Version ausgecheckt wurde, die zuletzt im Repository "eingecheckte" Version aber Änderungen hat. Diese Änderungen sind aber von Git noch nicht erfasst.
+Sonderfall "dirty working copy": Eine "schmutzige" Working-Copy ist ein spezieller Zustand bei dem eine konkrete Version ausgecheckt wurde und anschließend Änderungen an den den Dateien vorgenommen wurden. Diese Änderungen aber noch nicht ins VCS zurückgespielt wurden.
 
 ### Commit
 Ein "Commit" erfasst Änderungen an der "Working-Copy" und fügt diese Änderungen zur "Versionsgeschichte" hinzu.
@@ -49,9 +49,9 @@ Ein Commit besteht im Wesentlichen aus:
 
 All diese Informationen werden mit dem SHA-1 Verfahren gehasht. Der resultierende Hash wird als sog. "Commit-Hash" bzw. "Commit-Id" bezeichnet. Mit diesem Hash ist jeder Commit in einem Repository eindeutig indentifizierbar.
 
-Mehrere Commits bilden druch den Zeiger auf ihre Vorgänger einen gerichteten azyklischen Graphen (DAG).
+Mehrere Commits bilden durch den Zeiger auf ihre Vorgänger einen gerichteten azyklischen Graphen (DAG).
 
-Wichtig: Fügt man zu einem Repository einen Commit hinzu, existiert dieser Commit zunächst lediglich im lokalen Clone des Repository. 
+Wichtig: Fügt man zu einem Repository einen Commit hinzu, existiert dieser Commit zunächst lediglich im lokalen Clone des Repository.
 
 Fun Fact: Das ist im wesentlichen eine Blockchain ohne Proof-of-Work.
 
@@ -61,7 +61,6 @@ Unter einem "Clone" versteht man bei Git eine lokale Kopie eines entfernt gehost
 Innerhalb des "Clone" kann sich der Entwickler auf dem lokalen System frei bewegen. D.h. er kann jede Version "auschecken", verändern und neu "einchecken". Damit verändert er zunächst aber nur den eigenen "Clone".
 
 Bei einem "Checkout" wechselt der Benutzer auf dem lokalen System zwischen verschiedenen Versionen des lokalen Repositorys. Dadurch ändert sich i.d.R. auch die "Working-Copy".
-
 
 ### History
 Die Commits in einem Git-Repository erzeugen die sog. "History", also die Vergangenheit. Da ein einzelner Commit immer nur die Veränderung zu seinem Vorgänger enthält, muss für eine vollständige Wiederherstellung einer Version immer die komplette History vom gewünschten Zeitpunkt bis zum Ursprung "initialer Commit" durchgegangen werden.
@@ -128,7 +127,7 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 ### log
 * Mit `git log` kann man sich die Commit-History ansehen. Standardmäßig listet der Befehle die History vom aktuell ausgecheckten Commit zurück bis zum Ursprungs-Commit
 * Mit `git log $commithash` kann der Startpunkt der History geändert werden, so kann die History ab einem bestimmten Commit angesehen werden.
-* Hier kann man auch Branch-Namen verwenden, z.B. `git log main`, dadurch kann man auch bequem auf "andere" Branches schauen.
+* Hier kann man auch Branch-Namen verwenden, z.B. `git log main`, dadurch kann man auch bequem auf "andere" Branches schauen ohne vorher mit `checkout` auf den Branch wechseln zu müssen.
 
 ### restore
 * Mit `git restore $filename` werden alle Änderungen an dieser Datei in der aktuellen Working-Copy rückgängig gemacht. **WICHTIG** Diese Operation zerstört die Änderungen, diese können nicht wiederhergestellt werden - denn die Änderungen an der Working-Copy waren noch nicht "committed".
@@ -140,7 +139,7 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 * Nach einem `git fetch` ist es oft hilfreich ein `git status` auszführen um Informationen zu bekommen, wie die Neuigkeiten evtl. intergriert werden können.
 
 ### push
-* Mit `git push` veröffentlichen Sie alle ihre gemachten Commits aus dem lokalen Repository im verbundenen remote Repository.
+* Mit `git push` veröffentlichen Sie die Commits aus Ihrem lokalen Repository in das verbundene remote Repository.
 * Erst nachdem Sie `git push` gemacht haben, können andere Entwickler ihre commits sehen.
 * Wenn mehrere Entwickler auf dem selben Branch arbeiten, kann es durchaus sein, dass ihr `push` Befehl vom Server "rejected" wird, weil auf dem Branch bereits neuere Änderungen vorhanden sind. Häufig können Sie das Problem damm mit `git pull --rebase` und anschließendem `git push` korrigieren.
 * Empfehlung: Vermeiden Sie das mehrere Entwickler auf dem selben Branch arbeiten!
@@ -148,7 +147,7 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 ### pull
 * Mit `git pull` weisen Sie Git an, Änderungen die es auf dem remote Repository gibt, in ihre lokale "Working-Copy" zu übernehmen.
 * Wenn sich auf ihrem lokalem Branch Commits befinden, die remote nicht existieren, erzeugt `git pull` automatisch einen sog. "Merge-Commit". Dieser sollte anschließend geprüft werden, da hier oft unerwartet Änderungen passieren.
-* Um diesen "Merge-Commi" zu vermeiden, empfiehlt sich die Verwendung von `git pull --ff-only`. Dabei werden Änderungen vom remote nur übernommen, wenn es keine Commits gibt, die im Konflikt stehen.
+* Um diesen "Merge-Commit" zu vermeiden, empfiehlt sich die Verwendung von `git pull --ff-only`. Dabei werden Änderungen vom remote nur übernommen, wenn es keine Commits gibt, die im Konflikt stehen.
 
 ### checkout
 * Mit `git checkout $commitHash` können Sie einen beliebigen Commit aus dem Repository auschecken, d.h. ihre "Working-Copy" wechselt zu dieser Version.
@@ -195,7 +194,7 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
 * Node.JS: https://github.com/github/gitignore/blob/master/Node.gitignore
 
 ## Was ist GitHub (oder GitLab)
-* Bei GitHub/GitLab handelt es sich im Wesentlichen um Git Repository Hoster.
+* Bei GitHub/GitLab handelt es sich im Wesentlichen um einen git Repository Hoster.
 * Diese Dienste bieten es an, ein Git Repository zu erzeugen und dieses dann lokal zu klonen.
 * Lokale Änderungen können dann an diese Dienst gepusht werden.
 * Dadurch vereinfacht sich die Zusammenarbeit im Team, da alle über den selben Server Daten austauschen.
@@ -219,11 +218,11 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
 * Mittels SSH ist es möglich, SSH-Public-Key-Authentication mit GitHub zu nutzen. Hier muss nur einmalig ein Passwort eingegeben werden, um ihren SSH-Private-Key zu entschlüsseln.
 * Dazu benötigten Sie aber ein SSH-Schlüsselpaar. Gerade unter Windows ist das nicht ganz einfach.
 * Eine Anleitung für Windows: https://danielhuesken.de/git-fur-windows-installieren-und-ssh-keys-nutzen/
-* Unter Linux haben Sie i.d.R. bereits ein Schlüsselpar, bzw. können bequem mit `ssh-keygen` eins erzeugen.
+* Unter Linux haben Sie i.d.R. bereits ein Schlüsselpar, bzw. können bequem mit `ssh-keygen` eines erzeugen.
 * Den öffentlichen Schlüssel (public key) müssen Sie nun bei GitHub hinterlegen, dazu gibt es eine extra Dokumentation bei GitHub: https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
 
 ## Feature Branch Development
-* Um Konflikte zwischen Entwicklern zu vermeiden, sollten Entwickler niemals parallel auf dem selben Branch arbeiten.
+* Um Konflikte zwischen Entwicklern zu vermeiden, sollten Entwickler nicht gleichzeitig auf dem selben Branch arbeiten.
 * Unter Git hat sich daher das Konzept von "Feature-Branches" etabliert. Für jede zu erledigende Aufgabe wird ein neuer Feature-Branch angelegt.
 * Auf diesem Feature-Branch arbeitet ein Entwickler an genau dieser Aufgabe.
 * Ist die Aufgabe abgeschlossen, wird ein sog. "Merge-Request"/"Pull-Request" gestellt. Dieser drückt den Wunsch aus, den Feature-Branch jetzt in den Hauptzweig zu integrieren.
