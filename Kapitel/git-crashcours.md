@@ -249,6 +249,7 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
 
 ## Live Demo
 1) Create a empty repository in a new folder `git init`
+1) Create a new Express-API (`npx express-generator --no-view` && `npm install`)
 1) Show output of `git status`
 1) Add and Commit `README.md` as a good initial commit
 1) Add and Commit `.gitignore` from GitHub, check output of `git status` again
