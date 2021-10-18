@@ -21,7 +21,7 @@
 * Windows:
     * Git for windows: https://git-scm.com/download/win
     * **NICHT EMPFOHLEN**: TortoiseGit
-* MaxOS: Einfach `git` im Terminal eingeben, MacOS bietet die Installation dann an
+* MacOS: Einfach `git` im Terminal eingeben, MacOS bietet die Installation dann an
   Siehe "Installation unter macOS" unter https://git-scm.com/book/de/v2/Erste-Schritte-Git-installieren
 
 ## Tools
