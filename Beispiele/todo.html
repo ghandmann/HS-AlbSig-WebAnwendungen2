@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+  </head>
+
+  <body>
+    <h1>Todo App</h1>
+    <form>
+      <input type="text" name="newTodoText" id="newTodoText" />
+      <button id="saveTodoButton">Todo Speichern</button>
+    </form>
+    <ul id="todoList">
+    </ul>
+    <script>
+      let todoModel = [];
+
+      window.addEventListener("DOMContentLoaded", init);
+
+      function init() {
+        loadTodoItemFromStorage();
+        renderTodoList();
+        registerClickEventForSaveButton();
+      }
+
+      function registerClickEventForSaveButton() {
+        const saveButton = document.getElementById("saveTodoButton");
+        saveButton.addEventListener("click", (clickEvent) => {
+          const todoInput = document.getElementById("newTodoText");
+          const todoText = todoInput.value.trim();
+
+          if(todoText.length === 0) {
+            return;
+          }
+
+          storeNewTodoItem(todoText);
+          renderTodoList();
+
+          todoInput.value = "";
+
+          clickEvent.preventDefault();
+        });
+      }
+
+      function storeNewTodoItem(todoItemText) {
+        todoModel.push(todoItemText);
+
+        const todoModelAsJsonString = JSON.stringify(todoModel);
+        localStorage.setItem("todoStorage", todoModelAsJsonString);
+      }
+
+      function deleteTodoItem(todoItemText) {
+        todoModel = todoModel.filter(item => item !== todoItemText);
+
+        const todoModelAsJsonString = JSON.stringify(todoModel);
+        localStorage.setItem("todoStorage", todoModelAsJsonString);
+      }
+
+      function loadTodoItemFromStorage() {
+        const todoModelAsJsonString = localStorage.getItem("todoStorage");
+
+        if(todoModelAsJsonString) {
+          todoModel = JSON.parse(todoModelAsJsonString);
+        }
+      }
+
+      function clearTodoList() {
+        const listItems = document.querySelectorAll("#todoList li");
+        listItems.forEach((item) => item.remove());
+      }
+
+      function renderTodoList() {
+        clearTodoList();
+
+        todoModel.forEach((todoItem) => {
+          const newTodoItem = createNewTodoItem(todoItem);
+
+          const todoList = document.getElementById("todoList");
+          todoList.append(newTodoItem);
+        });
+      }
+
+      function createNewTodoItem(newtodoText) {
+        const newTodoItem = document.createElement("li");
+        newTodoItem.innerText = newtodoText;
+
+        const deleteLink = document.createElement("a");
+        deleteLink.setAttribute("href", "#");
+        deleteLink.innerText = "(delete item)";
+        deleteLink.addEventListener("click", () => {
+          deleteTodoItem(newtodoText);
+          newTodoItem.remove();
+        });
+
+        newTodoItem.append(deleteLink);
+
+        return newTodoItem;
+      }
+    </script>
+  </body>
+</html
