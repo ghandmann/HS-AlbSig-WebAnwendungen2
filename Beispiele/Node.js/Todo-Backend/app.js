@@ -37,4 +37,54 @@ app.get("/load", async (req, res) => {
     return res.send(jsonString);
 });
 
+app.get("/v1/todos", async (req, res) => {
+    let jsonString = "[]";
+
+    try {
+        jsonString = await readFile(storageFilename);
+    }
+    catch(error) {
+        // intentionally empty
+    }
+
+    return res.send(jsonString);
+});
+
+app.post("/v1/todos", async (req, res) => {
+    const todoItem = req.body;
+
+    const todoDataString = await readFile(storageFilename);
+
+    const allTodos = JSON.parse(todoDataString);
+
+    allTodos.push(todoItem);
+
+    await writeFile(storageFilename, JSON.stringify(allTodos));
+
+    return res.status(200).send();
+});
+
+app.delete("/v1/todos", async (req, res) => {
+    const emptyJsonArrayString = "[]";
+    await writeFile(storageFilename, emptyJsonArrayString);
+
+    return res.status(200).send();
+});
+
+app.delete("/v1/todos/:todoItemId", async (req, res) => {
+    let todoItemId = req.params["todoItemId"];
+    // make a number
+    todoItemId *= 1;
+
+    const todoDataString = await readFile(storageFilename);
+
+    const allTodos = JSON.parse(todoDataString);
+
+    const filteredTodos = allTodos.filter(item => item.id !== todoItemId);
+
+    await writeFile(storageFilename, JSON.stringify(filteredTodos));
+
+    return res.status(200).send();
+});
+
 module.exports = app;
