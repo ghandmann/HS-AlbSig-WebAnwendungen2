@@ -42,6 +42,7 @@
       </form>
       <ul id="todoList" class="list-group">
       </ul>
+      <button id="deleteAllButton" class="btn btn-lg btn-danger">DELETE ALL THE TODOS!</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
@@ -53,6 +54,7 @@
         await loadTodoItemFromBackend();
         renderTodoList();
         registerClickEventForSaveButton();
+        registerClickEventForDeleteAllButton();
       }
 
       function registerClickEventForSaveButton() {
@@ -71,6 +73,25 @@
 
           todoInput.value = "";
 
+        });
+      }
+
+      function registerClickEventForDeleteAllButton() {
+        var deleteButton = document.getElementById("deleteAllButton");
+        deleteButton.addEventListener("click", async (clickEvent) => {
+          clickEvent.preventDefault();
+
+          const answer = confirm("Really delete all items?");
+          if(answer === false) {
+            return;
+          }
+
+          await fetch("/v1/todos/", {
+            method: "DELETE"
+          });
+
+          todoModel = [];
+          renderTodoList();
         });
       }
 
