@@ -50,7 +50,7 @@
       window.addEventListener("DOMContentLoaded", init);
 
       async function init() {
-        await loadTodoItemFromStorage();
+        await loadTodoItemFromBackend();
         renderTodoList();
         registerClickEventForSaveButton();
       }
@@ -58,6 +58,7 @@
       function registerClickEventForSaveButton() {
         const saveButton = document.getElementById("saveTodoButton");
         saveButton.addEventListener("click", async (clickEvent) => {
+          clickEvent.preventDefault();
           const todoInput = document.getElementById("newTodoText");
           const todoText = todoInput.value.trim();
 
@@ -70,37 +71,45 @@
 
           todoInput.value = "";
 
-          clickEvent.preventDefault();
         });
       }
 
       async function storeNewTodoItem(todoItemText) {
-        todoModel.push(todoItemText);
+        const randomNumber = Math.random() * 100000;
+        const randomId = Number.parseInt(randomNumber);
 
-        await sendTodoModelToBackend();
+        const newTodoItem = {
+          id: randomId,
+          text: todoItemText,
+        };
+
+        todoModel.push(newTodoItem);
+
+        await sendTodoItemToBackend(newTodoItem);
       }
 
-      async function sendTodoModelToBackend() {
-        const todoModelAsJsonString = JSON.stringify(todoModel);
-
-        await fetch("http://localhost:3000/store", {
+      async function sendTodoItemToBackend(newTodoItem) {
+        await fetch("/v1/todos/", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "content-type": "application/json",
           },
-          body: todoModelAsJsonString,
+          body: JSON.stringify(newTodoItem)
         });
       }
 
-      async function deleteTodoItem(todoItemText) {
-        todoModel = todoModel.filter(item => item !== todoItemText);
+      async function deleteTodoItem(todoItem) {
+        todoModel = todoModel.filter(item => item.id !== todoItem.id);
 
-        await sendTodoModelToBackend();
+        const deleteUrl = "/v1/todos/" + todoItem.id;
+        await fetch(deleteUrl, {
+          method: "DELETE"
+        });
       }
 
-      async function loadTodoItemFromStorage() {
+      async function loadTodoItemFromBackend() {
         // const todoModelAsJsonString = localStorage.getItem("todoStorage");
-        const response = await fetch("http://localhost:3000/load");
+        const response = await fetch("http://localhost:3000/v1/todos/");
         const todoModelAsJson = await response.json();
 
         if(todoModelAsJson) {
@@ -124,7 +133,9 @@
         });
       }
 
-      function createNewTodoItem(newtodoText) {
+      function createNewTodoItem(todoItem) {
+
+        newtodoText = todoItem.text;
         const newTodoItem = document.createElement("li");
         newTodoItem.innerText = newtodoText;
         newTodoItem.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center");
@@ -132,7 +143,7 @@
         const deleteSpan = document.createElement("span");
         deleteSpan.setAttribute("class", "badge bg-danger rounded-pill");
         deleteSpan.addEventListener("click", async () => {
-          await deleteTodoItem(newtodoText);
+          await deleteTodoItem(todoItem);
           newTodoItem.remove();
         });
 
@@ -147,4 +158,4 @@
       }
     </script>
   </body>
-</html
+</html>
