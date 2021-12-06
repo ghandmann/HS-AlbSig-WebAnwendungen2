@@ -17,6 +17,9 @@
   * Element.append() / before() / after()
   * Element.remove()
   * Element.replaceWith() / replaceChildren()
+* Events in JavaScript
+  * Element.addEventListener()
+  * DOMContentLoaded / Click / mousemove / ...
   
 * Todo App
   * HTML5 Vanilla JS Only, DOM als Persistenz
