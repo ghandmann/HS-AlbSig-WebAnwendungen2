@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var todoDb = require('better-sqlite3')("todos.db");
 
 var app = express();
 
@@ -12,77 +13,30 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-let inMemoryStore = [];
-const storageFilename = "data.json";
-
-app.post("/store", async (req, res) => {
-    const json = req.body;
-
-    const jsonString = JSON.stringify(json);
-    await writeFile(storageFilename, jsonString);
-
-    return res.status(200).send();
-});
-
-app.get("/load", async (req, res) => {
-    let jsonString = "[]";
-
-    try {
-        jsonString = await readFile(storageFilename);
-    }
-    catch(error) {
-        // intentionally empty
-    }
-
-    return res.send(jsonString);
-});
-
 app.get("/v1/todos", async (req, res) => {
-    let jsonString = "[]";
+    const todoList = todoDb.prepare("SELECT * FROM todos").all();
 
-    try {
-        jsonString = await readFile(storageFilename);
-    }
-    catch(error) {
-        // intentionally empty
-    }
-
-    return res.send(jsonString);
+    return res.status(200).send(todoList);
 });
 
 app.post("/v1/todos", async (req, res) => {
     const todoItem = req.body;
 
-    const todoDataString = await readFile(storageFilename);
-
-    const allTodos = JSON.parse(todoDataString);
-
-    allTodos.push(todoItem);
-
-    await writeFile(storageFilename, JSON.stringify(allTodos));
+    todoDb.prepare('INSERT INTO todos ("text", id) VALUES (?, ?)').run(todoItem.text, todoItem.id);
 
     return res.status(200).send();
 });
 
 app.delete("/v1/todos", async (req, res) => {
-    const emptyJsonArrayString = "[]";
-    await writeFile(storageFilename, emptyJsonArrayString);
-
+    todoDb.exec("DELETE FROM todos");
+    
     return res.status(200).send();
 });
 
 app.delete("/v1/todos/:todoItemId", async (req, res) => {
     let todoItemId = req.params["todoItemId"];
-    // make a number
-    todoItemId *= 1;
-
-    const todoDataString = await readFile(storageFilename);
-
-    const allTodos = JSON.parse(todoDataString);
-
-    const filteredTodos = allTodos.filter(item => item.id !== todoItemId);
-
-    await writeFile(storageFilename, JSON.stringify(filteredTodos));
+    
+    todoDb.prepare("DELETE FROM todos WHERE id = ?").run(todoItemId);
 
     return res.status(200).send();
 });
