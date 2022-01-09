@@ -55,6 +55,39 @@
         renderTodoList();
         registerClickEventForSaveButton();
         registerClickEventForDeleteAllButton();
+
+        connectWebsocket();
+      }
+
+      function connectWebsocket() {
+        const websocket = new WebSocket("ws://localhost:3000/live-updates");
+        websocket.onclose = () => console.log("Websocket connection closed");
+        websocket.onerror = () => console.log("Websocket error occured");
+        websocket.onopen = () => console.log("Websocket connection established");
+
+        websocket.onmessage = (messageEvent) => {
+          const data = messageEvent.data;
+          const message = JSON.parse(data);
+
+          if(message.hasOwnProperty("type")) {
+            const messageType = message.type;
+            
+            if(messageType === "TodoItemCreated") {
+              todoModel.push(message.newTodoItem);
+            }
+
+            if(messageType === "TodoItemDeleted") {
+              todoModel = todoModel.filter(todoItem => todoItem.id != message.todoItemId);
+            }
+
+            if(messageType === "AllTodoItemsDeleted") {
+              todoModel = [];
+            }
+
+            renderTodoList();
+          }
+
+        }
       }
 
       function registerClickEventForSaveButton() {
@@ -103,8 +136,6 @@
           id: randomId,
           text: todoItemText,
         };
-
-        todoModel.push(newTodoItem);
 
         await sendTodoItemToBackend(newTodoItem);
       }

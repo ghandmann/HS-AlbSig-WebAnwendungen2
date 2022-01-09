@@ -1,5 +1,4 @@
-# Simple Todo App with express backend
-
+# Simple Todo App with websocket live updates
 ## Start
 
 This app requires an initialized SQLite DB. See "Create SQLite Database" for more information.
@@ -7,6 +6,18 @@ This app requires an initialized SQLite DB. See "Create SQLite Database" for mor
 1) `npm install`
 2) `npm run start`
 3) Go to [http://localhost:3000/todo-app.html](http://localhost:3000/todo-app.html)
+
+## Investigate the WebSocket updates
+
+With the tool `wscat` it is possible to connect to the running express-app and dump the WebSocket messages on the commandline.
+
+Just run
+
+```
+$ wscat -c ws://localhost:3000/live-upates
+```
+
+and create/delete a TodoItem.
 
 ## Create SQLite Database
 
