@@ -11,7 +11,14 @@ This app requires an initialized SQLite DB. See "Create SQLite Database" for mor
 
 With the tool `wscat` it is possible to connect to the running express-app and dump the WebSocket messages on the commandline.
 
-Just run
+### Install
+You can install `wscat` globally to easily run it:
+
+`npm install -g wscat`
+
+### Usage
+
+Just run after the express-server has been started:
 
 ```
 $ wscat -c ws://localhost:3000/live-upates
