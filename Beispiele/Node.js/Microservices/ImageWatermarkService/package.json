@@ -10,7 +10,7 @@
   "author": "Sven Eppler <sven@sveneppler.de>",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.8.0",
     "imagemagick": "^0.1.3"
   }
 }

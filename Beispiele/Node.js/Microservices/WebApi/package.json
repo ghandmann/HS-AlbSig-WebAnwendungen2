@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.8.0",
     "connect-busboy": "0.0.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
