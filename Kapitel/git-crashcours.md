@@ -112,12 +112,9 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 * Durch den `add` Befehl werden Änderung zunächst nur in die sog. `staging area` abgelegt. Das ist eine Art "Wartezimmer" um alle Änderungen zusammen zu tragen um diese dann in einem Commit tatsächlich fest ins Repository zu integrieren.
 * Hat man Dateien mit dem `add` Befehle hinzugefügt, kann man mit `git status` eine Auflistung erhalten, welche Dateien "staged" sind und welche "unstaged" sind.
 
-### diff
-* Mit `git diff` kann man sich die Unterschiede zwischen der aktuellen Working-Copy und der ausgecheckten Version anschauen.
-* Dabei kommt ein spezielles Diff-Format zum Einsatz das zum Teil nicht leicht zu interpretieren ist.
-* Mit `git diff -- $filename` kann man sich den Diff einer bestimmten Datei anzeigen.
-* Mit `git diff $OldRevision $NewRevision` kann man sich den Unterschied zweier Versionen im Repository ansehen.
-* Mit `git diff --cached` kann man sich der Unterschied von Dateien die im "staging" mode sind ansehen.
+## rm
+* Mit `git rm` können Dateien aus dem Repository gelöscht werden.
+* Mit `git rm --cached $fileName` kann eine Datei aus der `staging area` entfernt werden, d.H. sie wird nicht mehr zum commit vorgemerkt.
 
 ### commit
 * Mit `git commit` wird aus den Änderungen die im "staging" bereich sind ein commit erzeugt.
@@ -128,6 +125,13 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 * Mit `git log` kann man sich die Commit-History ansehen. Standardmäßig listet der Befehle die History vom aktuell ausgecheckten Commit zurück bis zum Ursprungs-Commit
 * Mit `git log $commithash` kann der Startpunkt der History geändert werden, so kann die History ab einem bestimmten Commit angesehen werden.
 * Hier kann man auch Branch-Namen verwenden, z.B. `git log main`, dadurch kann man auch bequem auf "andere" Branches schauen ohne vorher mit `checkout` auf den Branch wechseln zu müssen.
+
+### diff
+* Mit `git diff` kann man sich die Unterschiede zwischen der aktuellen Working-Copy und der ausgecheckten Version anschauen.
+* Dabei kommt ein spezielles Diff-Format zum Einsatz das zum Teil nicht leicht zu interpretieren ist.
+* Mit `git diff -- $filename` kann man sich den Diff einer bestimmten Datei anzeigen.
+* Mit `git diff $OldRevision $NewRevision` kann man sich den Unterschied zweier Versionen im Repository ansehen.
+* Mit `git diff --cached` kann man sich der Unterschied von Dateien die im "staging" mode sind ansehen.
 
 ### restore
 * Mit `git restore $filename` werden alle Änderungen an dieser Datei in der aktuellen Working-Copy rückgängig gemacht. **WICHTIG** Diese Operation zerstört die Änderungen, diese können nicht wiederhergestellt werden - denn die Änderungen an der Working-Copy waren noch nicht "committed".
