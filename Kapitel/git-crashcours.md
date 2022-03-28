@@ -136,6 +136,7 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 * Mit `git diff -- $filename` kann man sich den Diff einer bestimmten Datei anzeigen.
 * Mit `git diff $OldRevision $NewRevision` kann man sich den Unterschied zweier Versionen im Repository ansehen.
 * Mit `git diff --cached` kann man sich der Unterschied von Dateien die im "staging" mode sind ansehen.
+* Mit `git difftool` kann ein `diff` auch mit einem GUI Tool wie z.B. `Meld` angezeigt werden.
 
 ### restore
 * Mit `git restore $filename` werden alle Änderungen an dieser Datei in der aktuellen Working-Copy rückgängig gemacht. **WICHTIG** Diese Operation zerstört die Änderungen, diese können nicht wiederhergestellt werden - denn die Änderungen an der Working-Copy waren noch nicht "committed".
@@ -169,6 +170,7 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 * Sobald Sie die Konflikte aufgelöst haben, müssen die Konfliktdateien mit `git add $filename` als "resolved" markiert werden.
 * Danach kann mit `git merge --continue` der Merge fortgesetzt werden.
 * Sollten Sie den Merge aus irgendwelchen Gründen abbrechen wollen, können Sie mit `git merge --abort` den Merge-Vorgang abbrechen. Achtung: Das geht nur, wenn der Merge nicht konfliktfrei durchläuft!
+* Mit `git mergetool` kann ein merge auch mit einem GUI Tool wie z.B. `Meld` angezeigt werden.
 
 ## Gefährliche Befehle
 ### reset
