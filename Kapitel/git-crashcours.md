@@ -92,6 +92,10 @@ Das Konzept von Remote- und Local-Repository sorgt häufig für Verwirrung. Grun
 * Es empfiehlt sich vor der Verwendung eines grafischen Tools mit den Grundbefehlen auf dem Terminal auseinander zu setzen.
 * Unter Windows am besten mit der "git bash".
 
+### Hilfe
+* Jedes Kommando kann mit `--help` aufgerufen werden, um eine umfassende Erklärung zu erhalten.
+* Eine umfassende Einleitung/Erklärung von `git` und den Befehlen liefert das [Git book](https://git-scm.com/book/de/v2).
+
 ### init
 * Mit `git init` wird ein neues Git-Repository im aktuellem Verzeichnis angelegt.
 * Dabei ist egal, ob das Verzeichnis bereits Code enthält oder leer ist.
