@@ -18,6 +18,8 @@
     </ul>
 
     <script>
+        var todoListModel = ["Hier ist schon eins drin"];
+
         document.addEventListener("DOMContentLoaded", init);
 
         function init() {
@@ -38,23 +40,50 @@
                     return;
                 }
 
-                var newTodoItem = document.createElement("li");
-                var p = document.createElement("p");
-                p.innerText = newTodoText;
-                
-                newTodoItem.append(p);
-
-                newTodoItem.addEventListener("click", removeTodoItem);
-
-                var todoList = document.querySelector("#todoList");
-                todoList.append(newTodoItem);
+                todoListModel.push(newTodoText);
 
                 newTodoInput.value = "";
+
+                renderTodoList();
             });
 
-            function removeTodoItem(clickEvent) {
-                clickEvent.currentTarget.remove();
+            renderTodoList();
+        }
+
+        function removeTodoItem(clickEvent) {
+            var itemText = clickEvent.currentTarget.childNodes[0].innerText;
+            var newTodoListModel = todoListModel.filter(item => item != itemText);
+            todoListModel = newTodoListModel;
+
+            renderTodoList();
+        }
+
+        function clearTodoList() {
+            var listItems = document.querySelectorAll("#todoList li");
+            listItems.forEach(item => item.remove());
+        }
+
+        function renderTodoList() {
+            clearTodoList();
+
+            var todoList = document.querySelector("#todoList");
+            
+            for(todoItem of todoListModel) {
+                var newTodoItem = renderTodoListItem(todoItem);
+                todoList.append(newTodoItem);
             }
+        }
+
+        function renderTodoListItem(todoItemText) {
+            var newTodoItem = document.createElement("li");
+            var p = document.createElement("p");
+            p.innerText = todoItemText;
+            
+            newTodoItem.append(p);
+
+            newTodoItem.addEventListener("click", removeTodoItem);
+            
+            return newTodoItem;
         }
     </script>
 </body>
