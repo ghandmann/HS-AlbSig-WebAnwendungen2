@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Dinge die ich erledigen will</h1>
+
+    <form>
+        <input name="todoText" value="" placeholder="Was gibt es zu erledigen?" type="text" />
+        <button id="todoSpeichernButton">Todo hinzufügen!</button>
+    </form>
+
+    <ul id="todoList">
+    </ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", init);
+
+        function init() {
+            console.log(" * Page ready!");
+
+            var todoItems = document.querySelectorAll("#todoList li");
+
+            todoItems.forEach(item => item.addEventListener("click", removeTodoItem));
+
+            var saveBtn = document.querySelector("#todoSpeichernButton");
+            saveBtn.addEventListener("click", (clickEvent) => {
+                clickEvent.preventDefault();
+
+                var newTodoInput = document.querySelector('input[name="todoText"]');
+                var newTodoText = newTodoInput.value;
+
+                if(!newTodoText) {
+                    return;
+                }
+
+                var newTodoItem = document.createElement("li");
+                var p = document.createElement("p");
+                p.innerText = newTodoText;
+                
+                newTodoItem.append(p);
+
+                newTodoItem.addEventListener("click", removeTodoItem);
+
+                var todoList = document.querySelector("#todoList");
+                todoList.append(newTodoItem);
+
+                newTodoInput.value = "";
+            });
+
+            function removeTodoItem(clickEvent) {
+                clickEvent.currentTarget.remove();
+            }
+        }
+    </script>
+</body>
+</html>
