@@ -18,7 +18,7 @@
     </ul>
 
     <script>
-        var todoListModel = ["Hier ist schon eins drin"];
+        var todoListModel = [];
 
         document.addEventListener("DOMContentLoaded", init);
 
@@ -41,11 +41,14 @@
                 }
 
                 todoListModel.push(newTodoText);
+                saveTodoListInLocalStorage();
 
                 newTodoInput.value = "";
 
                 renderTodoList();
             });
+
+            loadTodoListFromLocalStorage();
 
             renderTodoList();
         }
@@ -54,6 +57,7 @@
             var itemText = clickEvent.currentTarget.childNodes[0].innerText;
             var newTodoListModel = todoListModel.filter(item => item != itemText);
             todoListModel = newTodoListModel;
+            saveTodoListInLocalStorage();
 
             renderTodoList();
         }
@@ -84,6 +88,21 @@
             newTodoItem.addEventListener("click", removeTodoItem);
             
             return newTodoItem;
+        }
+
+        function saveTodoListInLocalStorage() {
+            var todoModelAsJSONString = JSON.stringify(todoListModel);
+            localStorage.setItem("todoListModel", todoModelAsJSONString);
+        }
+
+        function loadTodoListFromLocalStorage() {
+            var todoModelAsJSONString = localStorage.getItem("todoListModel");
+            
+            if(todoModelAsJSONString === null) {
+                todoModelAsJSONString = "[]";
+            }
+
+            todoListModel = JSON.parse(todoModelAsJSONString);
         }
     </script>
 </body>
