@@ -20,7 +20,11 @@ app.get("/todo-items/", (req, res) => {
 
 // Neues todo item hinzufügen
 app.post("/todo-items/", (req, res) => {
+    var todoItem = req.body;
 
+    todoItemStore.push(todoItem);
+
+    res.status(200).send();
 });
 
 // Lösche ein todo item
