@@ -29,9 +29,19 @@ app.post("/todo-items/", (req, res) => {
 
 // Lösche ein todo item
 app.delete("/todo-items/:todoItemId", (req, res) => {
-    var todoItemIdToDelete = req.params.todoItemIdd;
+    let todoItemIdToDelete = req.params.todoItemId;
 
-    res.send("Lösche TodoItem mit Id " + todoItemIdToDelete);
+    let newTodoItemStore = []; 
+    for(var todoItem of todoItemStore) {
+        if(todoItem.id === todoItemIdToDelete) {
+            // do nothing
+        }
+        else {
+            newTodoItemStore.push(todoItem);
+        }
+    }
+
+    todoItemStore = newTodoItemStore;
 
 });
 
