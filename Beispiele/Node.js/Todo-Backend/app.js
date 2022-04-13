@@ -31,18 +31,9 @@ app.post("/todo-items/", (req, res) => {
 app.delete("/todo-items/:todoItemId", (req, res) => {
     let todoItemIdToDelete = req.params.todoItemId;
 
-    let newTodoItemStore = []; 
-    for(var todoItem of todoItemStore) {
-        if(todoItem.id === todoItemIdToDelete) {
-            // do nothing
-        }
-        else {
-            newTodoItemStore.push(todoItem);
-        }
-    }
+    todoItemStore = todoItemStore.filter((todoItem) => todoItem.id !== todoItemIdToDelete);
 
-    todoItemStore = newTodoItemStore;
-
+    res.status(200).send();
 });
 
 
