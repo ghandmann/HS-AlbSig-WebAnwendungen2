@@ -11,10 +11,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+let todoItemStore = [];
 
 // Gibt Liste aller TodoItem zurück
 app.get("/todo-items/", (req, res) => {
-
+    res.send(todoItemStore);
 });
 
 // Neues todo item hinzufügen
