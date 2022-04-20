@@ -1,4 +1,3 @@
-const { Console } = require('console');
 let fileSystem = require('fs');
 let fileSystemPromises = require('fs/promises');
 
@@ -18,7 +17,6 @@ function callbackStyle() {
             return;
         }
 
-        let buffer = [];
         fileSystem.readFile(fileHandle, (err, data) => {
             if(err) {
                 console.log(err);
