@@ -22,7 +22,7 @@ app.get("/todo-items/", (req, res) => {
 app.post("/todo-items/", (req, res) => {
     var todoItem = req.body;
 
-    todoItemStore.push(todoItem.text);
+    todoItemStore.push(todoItem);
 
     res.status(200).send();
 });

@@ -17,6 +17,12 @@
     <ul id="todoList">
     </ul>
 
+    <script type="module">
+        import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
+        // make nanoid globally available
+        window.nanoid = nanoid;
+    </script>
+
     <script>
         var todoListModel = [];
 
@@ -40,8 +46,13 @@
                     return;
                 }
 
-                todoListModel.push(newTodoText);
-                await saveTodoListItemInBackend(newTodoText);
+                let newTodoItem = {
+                    text: newTodoText,
+                    id: nanoid(),
+                };
+
+                todoListModel.push(newTodoItem);
+                await saveTodoListItemInBackend(newTodoItem);
                 await loadTodoListFromBackend();
 
                 newTodoInput.value = "";
@@ -55,11 +66,13 @@
         }
 
         async function removeTodoItem(clickEvent) {
-            var itemText = clickEvent.currentTarget.childNodes[0].innerText;
-            var newTodoListModel = todoListModel.filter(item => item != itemText);
-            todoListModel = newTodoListModel;
+            var li = clickEvent.currentTarget;
+            var todoItemIdToDelete = li.getAttribute("data-id");
 
-            await saveTodoListInBackend();
+            await deleteTodoItemFromBackend(todoItemIdToDelete);
+
+            var newTodoListModel = todoListModel.filter(item => item.id != todoItemIdToDelete);
+            todoListModel = newTodoListModel;
 
             renderTodoList();
         }
@@ -80,10 +93,11 @@
             }
         }
 
-        function renderTodoListItem(todoItemText) {
+        function renderTodoListItem(todoItem) {
             var newTodoItem = document.createElement("li");
+            newTodoItem.setAttribute("data-id", todoItem.id);
             var p = document.createElement("p");
-            p.innerText = todoItemText;
+            p.innerText = todoItem.text;
             
             newTodoItem.append(p);
 
@@ -121,14 +135,10 @@
             let response = await fetch("/todo-items/", requestOptions);
         }
 
-        async function saveTodoListItemInBackend(todoItemText) {
-            let todoItemAsJson = {
-                text: todoItemText 
-            };
-
+        async function saveTodoListItemInBackend(todoItem) {
             let requestOptions = {
                 method: "POST",
-                body:JSON.stringify(todoItemAsJson),
+                body:JSON.stringify(todoItem),
                 headers: {
                     "content-type": "application/json"
                 }
@@ -142,8 +152,12 @@
             todoListModel = await response.json();
         }
 
-        async function deleteTodoItemFromBackend(todoItemText) {
-            let response = await fetch("/todo-items")
+        async function deleteTodoItemFromBackend(todoItemId) {
+            let requestOptions = {
+                method: "DELETE"
+            }
+
+            let response = await fetch("/todo-items/" + todoItemId, requestOptions);
         }
     </script>
 </body>
