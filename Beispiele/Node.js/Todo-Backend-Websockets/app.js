@@ -26,7 +26,9 @@ app.post("/todo-items/", (req, res) => {
 
     todoItemStore.push(todoItem);
 
-    res.status(200).send();
+    broadcastTodoItemCreated(todoItem);
+
+    res.status(200);
 });
 
 // Lösche ein todo item
@@ -35,12 +37,14 @@ app.delete("/todo-items/:todoItemId", (req, res) => {
 
     todoItemStore = todoItemStore.filter((todoItem) => todoItem.id !== todoItemIdToDelete);
 
+    broadcastTodoItemDeleted(todoItemIdToDelete);
+
     res.status(200).send();
 });
 
 const server = app.listen(3000);
-server.on('listening', () => console.log("Server ready on http://localhost:3000/"));
-websocketServer = new WebSocketServer({ server: server, path: "/ws/" });
+server.on('listening', () => console.log("Server ready on http://localhost:3000/todo.html"));
+websocketServer = new WebSocketServer({ server: server, path: "/live-updates/" });
 
 websocketServer.on('connection', (clientWebsocket) => {
     console.log("new websocket client connected.");
@@ -49,3 +53,25 @@ websocketServer.on('connection', (clientWebsocket) => {
         console.log("websocket client disconnected.");
     });
 });
+
+function broadcastTodoItemCreated(newTodoItem) {
+    var message = {
+        type: "todo-item-erstellt",
+        newTodoItem: newTodoItem
+    };
+
+    broadcastMessage(JSON.stringify(message));
+}
+
+function broadcastTodoItemDeleted(deletedTodoItemId) {
+    var message = {
+        type: "todo-item-deleted",
+        deletedTodoItemId: deletedTodoItemId
+    };
+
+    broadcastMessage(JSON.stringify(message));
+}
+
+function broadcastMessage(message) {
+    websocketServer.clients.forEach(client => client.send(message));
+}

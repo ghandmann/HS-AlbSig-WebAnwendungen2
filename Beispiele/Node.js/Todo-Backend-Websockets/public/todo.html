@@ -55,20 +55,16 @@
                     id: nanoid(),
                 };
 
-                // todoListModel.push(newTodoItem);
                 await saveTodoListItemInBackend(newTodoItem);
-                // await loadTodoListFromBackend();
 
-                // newTodoInput.value = "";
-
-                // renderTodoList();
+                newTodoInput.value = "";
             });
 
             await loadTodoListFromBackend();
 
             renderTodoList();
 
-            let websocket = new WebSocket("ws://localhost:3000/ws/");
+            let websocket = new WebSocket("ws://localhost:3000/live-updates/");
             websocket.addEventListener('open', () => console.log("Websocket connection established."));
             websocket.addEventListener('error', () => console.log("Websocket error"));
             websocket.addEventListener('close', () => console.log("Websocket disconnected"));
@@ -76,15 +72,17 @@
                 const message = JSON.parse(msgEvent.data);
 
                 console.log("Received via Websocket: " + message);
-                if(message.type === "todo-item-added") {
-                    var item = message.todoItem;
+                if(message.type === "todo-item-created") {
+                    var item = message.newTodoItem;
                     todoListModel.push(item);
                     renderTodoList();
-
                 }
                 else if(message.type === "todo-item-deleted") {
-                    todoListModel = todoListModel.filter(item => item.id != message.todoItemId);
+                    todoListModel = todoListModel.filter(item => item.id != message.deletedTodoItemId);
                     renderTodoList();
+                }
+                else {
+                    console.log("received unhandled message", message);
                 }
             });
         }
