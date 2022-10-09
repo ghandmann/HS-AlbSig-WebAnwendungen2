@@ -1,9 +1,26 @@
-Platzhalter für die kommende Implementierung eines Todo-App backends.
+# Todo Backend
+Dieser Ordner ist ein Platzhalter für die kommende Entwicklung eines einfachen Todo Backends.
 
-## Todo
+## REST API
 
-1) Include nanoid:
-  ```javascript
+* `GET /api/v1/todos` Listet alle Todo Items auf
+* `POST /api/v1/todos` Fügt ein neues Todo hinzu
+* `DELETE /api/v1/todos/:itemid` Löscht das Todo mit der entsprechenden ID
+
+## Datenmodel
+
+### Todo Item
+```json
+{
+  "text": "Der Text des TodoItems",
+  "id": "RandomNanoId",
+  "created": "2022-10-01T12:00:00Z"
+}
+```
+
+## Nanoid
+
+```javascript
 <script type="module">
     import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
     // make nanoid globally available
@@ -11,15 +28,7 @@ Platzhalter für die kommende Implementierung eines Todo-App backends.
 </script>
 ```
 
-2) Refactor Todo-Item-Struktur
-  - Todo-Item Objekt: `{ "text": "todo-item-text", "id": 4711 }`
-  - `renderTodoListItem`
-  - `saveBtn.addEventListener("click", ...`
-  - `removeTodoItem`
-  - `saveTodoListItemInBackend`
-  - `deleteTodoItemFromBackend`
-  
-3) Anpassen des `POST /todo-items` Endpoints
-4) Remove obsolete functions
-5) Styling with Bootstrap
+## Bonus
+## Todo
+- Styling with Bootstrap
   - Themes with Bootswatch
