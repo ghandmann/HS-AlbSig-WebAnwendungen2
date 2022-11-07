@@ -7,21 +7,15 @@
     <title>TODO App</title>
 </head>
 <body>
-    <h1>Die beste TODO App im Netz!</h1>
-    <input type="text" name="newtodo"/>
-    <button>Todo merken</button>
-
-    <ul>
-        <li>Mein Todo 1</li>
-        <li>Mein Todo 2</li>
-    </ul>
-
+    <h1>Die beste TODO App im Netz v2.0!</h1>
+    <input id="new-todo-text" type="text" name="newtodo"/>
+    <button id="todo-merken-button">Todo Merken</button>
+    <ul></ul>
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
-            // TODO besserer CSS selector
-            const button = document.querySelector("button");
+            const button = document.querySelector("#todo-merken-button");
             button.addEventListener("click", () => {
-                const input = document.querySelector("input");
+                const input = document.querySelector("#new-todo-text");
                 const todoText = input.value;
 
                 if(todoText == "") {
@@ -30,14 +24,15 @@
 
                 const todoItem = document.createElement("li");
                 todoItem.innerText = todoText;
+                todoItem.addEventListener("click", () => {
+                    todoItem.remove();
+                });
 
                 const todoList = document.querySelector("ul");
                 todoList.append(todoItem);
 
                 input.value = "";
             });
-
-            console.log("ans ende");
         });
     </script>
 </body>
