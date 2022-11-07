@@ -15,5 +15,30 @@
         <li>Mein Todo 1</li>
         <li>Mein Todo 2</li>
     </ul>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // TODO besserer CSS selector
+            const button = document.querySelector("button");
+            button.addEventListener("click", () => {
+                const input = document.querySelector("input");
+                const todoText = input.value;
+
+                if(todoText == "") {
+                    return;
+                }
+
+                const todoItem = document.createElement("li");
+                todoItem.innerText = todoText;
+
+                const todoList = document.querySelector("ul");
+                todoList.append(todoItem);
+
+                input.value = "";
+            });
+
+            console.log("ans ende");
+        });
+    </script>
 </body>
 </html>
