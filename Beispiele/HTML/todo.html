@@ -5,35 +5,134 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TODO App</title>
+    <link href="https://bootswatch.com/5/spacelab/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Die beste TODO App im Netz v2.0!</h1>
-    <input id="new-todo-text" type="text" name="newtodo"/>
-    <button id="todo-merken-button">Todo Merken</button>
-    <ul></ul>
+    <div class="container">
+        <h1>Die beste TODO App im Netz v2.0!</h1>
+        <form>
+            <div class="input-group">
+                <input class="form-control" id="new-todo-text" type="text" name="newtodo"/>
+                <button id="todo-merken-button" class="btn btn-primary">Todo Merken</button>
+            </div>
+        </form>
+        <br/>
+        <ul class="list-group" id="todo-list"></ul>
+    </div>
     <script>
-        window.addEventListener('DOMContentLoaded', (event) => {
-            const button = document.querySelector("#todo-merken-button");
-            button.addEventListener("click", () => {
-                const input = document.querySelector("#new-todo-text");
-                const todoText = input.value;
+        // Einsprungpunkt: Sobald die Seite fertig geladen wird, wird die Funktion 'initTodoApp' aufgerufen.
+        window.addEventListener('DOMContentLoaded', initTodoApp);
 
-                if(todoText == "") {
-                    return;
-                }
+        function initTodoApp() {
+            // Den "Todo Merken" Button aus dem DOM selektieren.
+            const createTodoItemButton = document.querySelector("#todo-merken-button");
+            // Einen click event listener hinterlegen, der beim klicken auf den button die funktion "createTodoItem" aufruft
+            createTodoItemButton.addEventListener("click", createTodoItem);
 
-                const todoItem = document.createElement("li");
-                todoItem.innerText = todoText;
-                todoItem.addEventListener("click", () => {
-                    todoItem.remove();
-                });
+            // Verhindern dass das Formular beim drücken von "enter" abgeschickt wird.
+            document.querySelector("form").addEventListener("submit", (event) => event.preventDefault());
 
-                const todoList = document.querySelector("ul");
-                todoList.append(todoItem);
+            // Bereits angelegte TodoListe aus dem LocalStorage laden
+            const todoList = loadTodoListFromLocalStorage();
+            // Geladene TodoList in HTML rendern
+            renderTodoList(todoList);
+        }
 
-                input.value = "";
+        // Diese Funktion wird aufgerufen wenn der "Todo Merken" Button geklickt wird.
+        function createTodoItem() {
+            // Das Input-Feld aus dem DOM holen
+            const input = document.querySelector("#new-todo-text");
+            // Den Text aus dem Input-Feld holen
+            const todoText = input.value;
+
+            // Sofern kein Text eingegeben wurde, nichts machen.
+            if(todoText == "") {
+                return;
+            }
+
+            // Ein neues TodoItem Element erzeugen
+            const todoItem = renderTodoListItem(todoText);
+
+            // Das <ul>-Element aus dem DOM holen
+            const todoList = document.querySelector("ul");
+            // An das <ul>-Element das neu erzeugte TodoItem Element anhängen
+            todoList.append(todoItem);
+
+            // Das neue Todo im LocalStoarge speichern
+            addTodoItemToLocalStorage(todoText);
+
+            // Das Eingabfeld leeren
+            input.value = "";
+        }
+
+        // Fügt ein TodoItem an die Liste der gespeicherten TodoItems im LocalStorage hinzu
+        function addTodoItemToLocalStorage(newTodoItem) {
+            const todoList = loadTodoListFromLocalStorage();
+            todoList.push(newTodoItem);
+            saveTodoListToLocalStorage(todoList);
+        }
+
+        // Entfernt ein TodoItem aus der Liste der gespeicherten TodoItems im LocalStorage
+        function removeTodoItemFromLocalStorage(todoItemToRemove) {
+            let todoList = loadTodoListFromLocalStorage();
+            todoList = todoList.filter((candidate) => candidate != todoItemToRemove);
+            saveTodoListToLocalStorage(todoList);
+        }
+
+        // Speichert eine Liste von TodoItems im LocalStorage
+        function saveTodoListToLocalStorage(todoItemsToStore) {
+            // Die übergebene Liste in einen JSON string umwandeln
+            const todoListData = JSON.stringify(todoItemsToStore);
+            // Den JSON string mit dem key "todo-list" im LocalStorage ablegen.
+            window.localStorage.setItem("todo-list", todoListData);
+        }
+
+        // Lädt eine Liste von TodoItems vom LocalStorage.
+        // Liefert eine leere Liste, sofern im LocalStorage noch keine Daten gespeicehrt wurden.
+        function loadTodoListFromLocalStorage() {
+            // Aus dem LocalStorage die Daten mit dem key "todo-list" auslesen
+            const todoListData = window.localStorage.getItem("todo-list");
+            // Sofern keine Daten ausgelesen werden konnten (z.B. aller erster Besuch) ein leeres Array zurückgeben
+            if(!todoListData) {
+                return [];
+            }
+
+            // Den geladenen JSON string in ein array zurück konvertieren
+            const restoredTodoList = JSON.parse(todoListData);
+            return restoredTodoList;
+        }
+
+        // Erzeugt für jeden eintrag in der TodoListe ein passenden TodoItem
+        function renderTodoList(todoListItems) {
+            // Holen des <ul>-Elements aus dem DOM
+            const list = document.querySelector("#todo-list");
+
+            // Funktionale Version einer for-Schleife
+            todoListItems.forEach((todoListItemText) => {
+                // Erzeuge aus dem aktuellen Schleifenelement ein neues <li>-Element
+                var todoItemElement = renderTodoListItem(todoListItemText);
+
+                // Füge das neue <li>-Element an die <ul>-Liste an.
+                list.append(todoItemElement);
             });
-        });
+        }
+
+        // Erzeugt ein <li>-Element für ein neues TodoItem
+        function renderTodoListItem(todoListItemText) {
+            var newTodoItemElement = document.createElement("li");
+            newTodoItemElement.innerText = todoListItemText;
+            // An das erzeugte <li>-Element ein "class" Attribut hinzufügen
+            newTodoItemElement.setAttribute("class", "list-group-item");
+
+            // Einen Click-Eventhandler registrieren der beim klicken auf das Element das Element entfernt.
+            newTodoItemElement.addEventListener("click", () => {
+                newTodoItemElement.remove();
+
+                removeTodoItemFromLocalStorage(todoListItemText);
+            });
+
+            return newTodoItemElement;
+        }
     </script>
 </body>
 </html>
