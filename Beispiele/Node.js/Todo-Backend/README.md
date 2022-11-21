@@ -12,9 +12,9 @@ Dieser Ordner ist ein Platzhalter für die kommende Entwicklung eines einfachen 
 ### Todo Item
 ```json
 {
-  "text": "Der Text des TodoItems",
+  "title": "Der Text des TodoItems",
   "id": "RandomNanoId",
-  "created": "2022-10-01T12:00:00Z"
+  "created": "2022-10-01T12:00:00Z",
 }
 ```
 

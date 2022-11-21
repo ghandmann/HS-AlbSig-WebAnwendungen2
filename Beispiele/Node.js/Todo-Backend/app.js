@@ -18,7 +18,11 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 let todoInMemoryStore = [];
-
+/*
+[
+    { "title": "XXX", "id": "sljsfg", "created": "dkdkdk" },
+]
+*/
 // Alle Todos auslesen
 app.get("/api/v1/todos", (req, res) => {
     return res.send(todoInMemoryStore);
@@ -27,16 +31,15 @@ app.get("/api/v1/todos", (req, res) => {
 // Todo speichern
 app.post("/api/v1/todos", (req, res) => {
     var todoBody = req.body;
-    todoInMemoryStore.push(todoBody.todo);
+    todoInMemoryStore.push(todoBody);
     return res.status(200).send();
 });
 
 // Todo löschen
-app.delete("/api/v1/todos", (req, res) => {
-    let todoBody = req.body;
-    let todoText = todoBody.todo;
+app.delete("/api/v1/todos/:todoId", (req, res) => {
+    const id = req.params["todoId"]; // Muss Namen in URL matchen
 
-    todoInMemoryStore = todoInMemoryStore.filter(item => item != todoText);
+    todoInMemoryStore = todoInMemoryStore.filter(item => item.id != id);
     return res.status(200).send();
 });
 
