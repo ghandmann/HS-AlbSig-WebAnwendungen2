@@ -32,10 +32,16 @@
             // Verhindern dass das Formular beim drücken von "enter" abgeschickt wird.
             document.querySelector("form").addEventListener("submit", (event) => event.preventDefault());
 
+            await loadAndRenderTodoList();
+        }
+
+        async function loadAndRenderTodoList() {
             // Bereits angelegte TodoListe aus dem LocalStorage laden
             const todoList = await loadTodoListFromBackend();
             // Geladene TodoList in HTML rendern
             renderTodoList(todoList);
+
+            window.setTimeout(loadAndRenderTodoList, 5000);
         }
 
         // Diese Funktion wird aufgerufen wenn der "Todo Merken" Button geklickt wird.
@@ -50,8 +56,14 @@
                 return;
             }
 
+            let todoItemData = {
+                title: todoText,
+                id: nanoid(),
+                created: new Date().toISOString(),
+            };
+
             // Ein neues TodoItem Element erzeugen
-            const todoItem = renderTodoListItem(todoText);
+            const todoItem = renderTodoListItem(todoItemData);
 
             // Das <ul>-Element aus dem DOM holen
             const todoList = document.querySelector("ul");
@@ -59,7 +71,7 @@
             todoList.append(todoItem);
 
             // Das neue Todo im LocalStoarge speichern
-            addTodoItemToBackend(todoText);
+            addTodoItemToBackend(todoItemData);
 
             // Das Eingabfeld leeren
             input.value = "";
@@ -67,32 +79,22 @@
 
         // Fügt ein TodoItem an die Liste der gespeicherten TodoItems im LocalStorage hinzu
         async function addTodoItemToBackend(newTodoItem) {
-            let bodyData = {
-                todo: newTodoItem,
-            };
-
             var response = await fetch("/api/v1/todos", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(bodyData)
+                body: JSON.stringify(newTodoItem)
             });
             // Sämtliche Fehlerbehandlung wird erstmal ignoriert. :)
         }
 
         // Entfernt ein TodoItem aus der Liste der gespeicherten TodoItems im LocalStorage
         async function removeTodoItemFromBackend(todoItemToRemove) {
-            let bodyData = {
-                todo: todoItemToRemove
-            };
+            const deleteUrl = "/api/v1/todos/" + todoItemToRemove.id;
 
-            var response = await fetch("/api/v1/todos", {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(bodyData)
+            var response = await fetch(deleteUrl, {
+                method: "DELETE"
             });
         }
 
@@ -113,14 +115,15 @@
         }
 
         // Erzeugt für jeden eintrag in der TodoListe ein passenden TodoItem
-        function renderTodoList(todoListItems) {
+        function renderTodoList(todoList) {
             // Holen des <ul>-Elements aus dem DOM
             const list = document.querySelector("#todo-list");
+            list.replaceChildren();
 
             // Funktionale Version einer for-Schleife
-            todoListItems.forEach((todoListItemText) => {
+            todoList.forEach((todoItem) => {
                 // Erzeuge aus dem aktuellen Schleifenelement ein neues <li>-Element
-                var todoItemElement = renderTodoListItem(todoListItemText);
+                var todoItemElement = renderTodoListItem(todoItem);
 
                 // Füge das neue <li>-Element an die <ul>-Liste an.
                 list.append(todoItemElement);
@@ -128,9 +131,9 @@
         }
 
         // Erzeugt ein <li>-Element für ein neues TodoItem
-        function renderTodoListItem(todoListItemText) {
+        function renderTodoListItem(todoItem) {
             var newTodoItemElement = document.createElement("li");
-            newTodoItemElement.innerText = todoListItemText;
+            newTodoItemElement.innerText = todoItem.title;
             // An das erzeugte <li>-Element ein "class" Attribut hinzufügen
             newTodoItemElement.setAttribute("class", "list-group-item");
 
@@ -138,11 +141,17 @@
             newTodoItemElement.addEventListener("click", async () => {
                 newTodoItemElement.remove();
 
-                await removeTodoItemFromBackend(todoListItemText);
+                await removeTodoItemFromBackend(todoItem);
             });
 
             return newTodoItemElement;
         }
     </script>
+
+<script type="module">
+    import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
+    // make nanoid globally available
+    window.nanoid = nanoid;
+</script>
 </body>
 </html>
