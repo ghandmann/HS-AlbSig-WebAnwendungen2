@@ -1,0 +1,15 @@
+{
+  "name": "todo-backend-websockets",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^4.18.2",
+    "morgan": "~1.9.1",
+    "ws": "^8.12.0"
+  }
+}
