@@ -10,6 +10,12 @@ Dieser Ordner ist ein Platzhalter für die kommende Entwicklung eines einfachen 
 ## Datenmodel
 
 ### Todo Item
+Ein konkretes Todo Item bilden wir in form eines JSON Objektes ab, dass aus drei Properties besteht:
+ * `title`: Der eigentlich Titel des Todo Items
+ * `id`: Die ID des Items um es zu referenzieren (z.B. beim löschen)
+ * `created`: Ein Zeitstempel der angibt, wann das Item angelegt wurde
+
+ Beispiel JSON-Objekt:
 ```json
 {
   "title": "Der Text des TodoItems",
@@ -27,8 +33,3 @@ Dieser Ordner ist ein Platzhalter für die kommende Entwicklung eines einfachen 
     window.nanoid = nanoid;
 </script>
 ```
-
-## Bonus
-## Todo
-- Styling with Bootstrap
-  - Themes with Bootswatch
