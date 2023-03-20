@@ -1,4 +1,4 @@
-# Git Crashcours
+# Git Crashcourse
 
 ## Was ist ein Versionskontrollsystem (VCS)?
 * Erfassen aller Änderungen am Quellcode "Change Management":
