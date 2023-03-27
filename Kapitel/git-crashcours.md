@@ -215,6 +215,7 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
    * Branching-Workflows
    * Continious Integration (CI) und Continious Deployment (CD) Pipelines
    * Web-IDEs
+   * AI-Gestütze Entwicklung
 
 * Im Weiteren gehen wir nur noch auf die Besonderheiten von GitHub ein.
 ## Authentifizierung
@@ -256,3 +257,6 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
    * Irgendwann kommt der erste Merge-Conflict - keine Angst! Stellen Sie sich der Herausforderung.
    * Git ist nicht für den Inhalt verantwortlich: Wenn Sie den Code nicht verstehen, dann kann Ihnen Git auch nicht helfen! Und am Ende müssen Sie entscheiden: Ist der Commit/Merge gut oder nicht?
 * Wenns gar nicht mehr weiter geht: Fragen Sie mich einfach, sofern ich Zeit habe, schaue ich auch gerne kurz remote mit drauf.
+
+
+Viel zu viel Stoff für eine Vorlesung.
