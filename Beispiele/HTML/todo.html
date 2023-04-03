@@ -4,9 +4,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TODO App</title>
+    <title>Todo App</title>
 </head>
 <body>
-    <h1>Hier entsteht die beste TODO App im Netz v2.0!</h1>
+    <h1>Meine coole Todo App</h1>
+    <input type="text" name="neues-todo"><button id="add-todo-button">Todo hinzufügen</button>
+    <ul>
+    </ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // DOM fertig geladen
+            const addTodoButton = document.querySelector("#add-todo-button");
+            addTodoButton.addEventListener("click", addTodoItem);
+        });
+
+        function addTodoItem() {
+            // Hole das input element in dem der Text steht
+            const todoInput = document.querySelector("body > input[type=text]");
+            // Hole den text aus dem input element
+            const todoText = todoInput.value;
+
+            // Gibt es überhaupt eine Eingabe?
+            if(todoText === "") {
+                return;
+            }
+
+            // Erzeuge ein neues li element
+            const todoItem = document.createElement("li");
+            // Füge text zum neuen Element hinzu
+            todoItem.textContent = todoText;
+
+            todoItem.addEventListener("click",removeTodoItem);
+
+            // Füge neues Element dem DOM hinzu
+            const todoList = document.querySelector("ul");
+            todoList.append(todoItem);
+
+            // Reset input feld
+            todoInput.value = "";
+        }
+
+        function removeTodoItem(eventData) {
+            const itemToRemove = eventData.target;
+            itemToRemove.remove();
+        }
+    </script>
 </body>
 </html>
