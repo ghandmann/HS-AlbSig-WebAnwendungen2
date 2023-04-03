@@ -17,7 +17,28 @@
             // DOM fertig geladen
             const addTodoButton = document.querySelector("#add-todo-button");
             addTodoButton.addEventListener("click", addTodoItem);
+
+            const persistedItems = loadItemsFromLocalStorage();
+            console.log("Aus dem storage", persistedItems);
+
+            for(let i = 0; i < persistedItems.length; i++) {
+                const item = persistedItems[i];
+                renderTodoItem(item);
+            }
         });
+
+        function renderTodoItem(itemToRender) {
+            // Erzeuge ein neues li element
+            const todoItem = document.createElement("li");
+            // Füge text zum neuen Element hinzu
+            todoItem.textContent = itemToRender;
+
+            todoItem.addEventListener("click",removeTodoItem);
+
+            // Füge neues Element dem DOM hinzu
+            const todoList = document.querySelector("ul");
+            todoList.append(todoItem);
+        }
 
         function addTodoItem() {
             // Hole das input element in dem der Text steht
@@ -43,11 +64,49 @@
 
             // Reset input feld
             todoInput.value = "";
+
+            // "persistenz" mit LocalStorage
+            addItemToLocalStorage(todoText);
         }
 
         function removeTodoItem(eventData) {
             const itemToRemove = eventData.target;
+            const itemText = itemToRemove.innerText;
             itemToRemove.remove();
+
+            removeItemFromLocalStorage(itemText);
+        }
+
+        function addItemToLocalStorage(todoText) {
+            let itemsFromStorage = window.localStorage.getItem("todo-items");
+            if(itemsFromStorage === null) {
+                itemsFromStorage = [];
+            }
+            else {
+                itemsFromStorage = JSON.parse(itemsFromStorage);
+            }
+
+            itemsFromStorage.push(todoText);
+
+            window.localStorage.setItem("todo-items", JSON.stringify(itemsFromStorage));
+        }
+
+        function loadItemsFromLocalStorage() {
+            const items = window.localStorage.getItem("todo-items");
+
+            if(items === null) {
+                return [];
+            }
+
+            return JSON.parse(items);
+        }
+
+        function removeItemFromLocalStorage(itemTextToDelete) {
+            let persistedItems = loadItemsFromLocalStorage();
+
+            let filteredItems = persistedItems.filter((currentItem) => currentItem != itemTextToDelete);
+
+            window.localStorage.setItem("todo-items", JSON.stringify(filteredItems));
         }
     </script>
 </body>
