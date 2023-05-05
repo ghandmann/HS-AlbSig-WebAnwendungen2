@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Meine coole Todo App</h1>
+    <input type="text" name="neues-todo"><button id="add-todo-button">Todo hinzufügen</button>
+    <ul>
+    </ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // DOM fertig geladen
+            const addTodoButton = document.querySelector("#add-todo-button");
+            addTodoButton.addEventListener("click", addTodoItem);
+
+            const persistedItems = await loadItemsFromBackend();
+            console.log("Aus dem storage", persistedItems);
+
+            for(let i = 0; i < persistedItems.length; i++) {
+                const item = persistedItems[i];
+                renderTodoItem(item);
+            }
+        });
+
+        function renderTodoItem(itemToRender) {
+            // Erzeuge ein neues li element
+            const todoItem = document.createElement("li");
+            // Füge text zum neuen Element hinzu
+            todoItem.textContent = itemToRender.title;
+
+            todoItem.addEventListener("click",removeTodoItem);
+
+            // Füge neues Element dem DOM hinzu
+            const todoList = document.querySelector("ul");
+            todoList.append(todoItem);
+        }
+
+        function addTodoItem() {
+            // Hole das input element in dem der Text steht
+            const todoInput = document.querySelector("body > input[type=text]");
+            // Hole den text aus dem input element
+            const todoText = todoInput.value;
+
+            // Gibt es überhaupt eine Eingabe?
+            if(todoText === "") {
+                return;
+            }
+
+            // Erzeuge ein neues li element
+            const todoItem = document.createElement("li");
+            // Füge text zum neuen Element hinzu
+            todoItem.textContent = todoText;
+
+            todoItem.addEventListener("click",removeTodoItem);
+
+            // Füge neues Element dem DOM hinzu
+            const todoList = document.querySelector("ul");
+            todoList.append(todoItem);
+
+            // Reset input feld
+            todoInput.value = "";
+
+            // "persistenz" mit LocalStorage
+            addItemToLocalStorage(todoText);
+        }
+
+        function removeTodoItem(eventData) {
+            const itemToRemove = eventData.target;
+            const itemText = itemToRemove.innerText;
+            itemToRemove.remove();
+
+            removeItemFromLocalStorage(itemText);
+        }
+
+        function addItemToLocalStorage(todoText) {
+            let itemsFromStorage = window.localStorage.getItem("todo-items");
+            if(itemsFromStorage === null) {
+                itemsFromStorage = [];
+            }
+            else {
+                itemsFromStorage = JSON.parse(itemsFromStorage);
+            }
+
+            itemsFromStorage.push(todoText);
+
+            window.localStorage.setItem("todo-items", JSON.stringify(itemsFromStorage));
+        }
+
+        function loadItemsFromLocalStorage() {
+            const items = window.localStorage.getItem("todo-items");
+
+            if(items === null) {
+                return [];
+            }
+
+            return JSON.parse(items);
+        }
+
+        function removeItemFromLocalStorage(itemTextToDelete) {
+            let persistedItems = loadItemsFromLocalStorage();
+
+            let filteredItems = persistedItems.filter((currentItem) => currentItem != itemTextToDelete);
+
+            window.localStorage.setItem("todo-items", JSON.stringify(filteredItems));
+        }
+
+        // new fetch api
+        async function loadItemsFromBackend() {
+            const response = await fetch("/api/v1/todos");
+
+            const todoList = await response.json();
+
+            return todoList;
+        }
+    </script>
+</body>
+</html>
