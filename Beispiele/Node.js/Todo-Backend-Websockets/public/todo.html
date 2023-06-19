@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Meine coole Todo App</h1>
+    <input type="text" name="neues-todo"><button id="add-todo-button">Todo hinzufügen</button>
+    <ul>
+    </ul>
+
+    <script type="module">
+        // NanoID is a simple random ID generator. See https://github.com/ai/nanoid
+        import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
+        // make nanoid globally available
+        window.nanoid = nanoid;
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // DOM fertig geladen
+            const addTodoButton = document.querySelector("#add-todo-button");
+            addTodoButton.addEventListener("click", addTodoItem);
+
+            // Beim "starten" der Anwendung alle TodoItems aus dem Backend laden
+            const persistedItems = await loadItemsFromBackend();
+
+            // Alle geladenen Items rendern
+            for(let i = 0; i < persistedItems.length; i++) {
+                const item = persistedItems[i];
+                renderTodoItem(item);
+            }
+
+            let ws = new WebSocket("ws://localhost:3000/live-updates/");
+
+            ws.onmessage = (messageEvent) => {
+                console.log("WebSocket Nachricht erhalten:", messageEvent);
+
+                let mesage = messageEvent.data;
+                let parsedMessage = JSON.parse(mesage);
+
+                if(parsedMessage.type === "todo-item-created") {
+                    console.log("Neues Todo Item", parsedMessage.newTodoItem);
+                    renderTodoItem(parsedMessage.newTodoItem);
+                }
+                else if(parsedMessage.type === "todo-item-deleted") {
+                    console.log("TodoItem gelöscht", parsedMessage.deletedTodoItemId);
+                    let idToDelete = parsedMessage.deletedTodoItemId;
+
+                    let todoElement = document.querySelector('li[data-id="' + idToDelete + '"]');
+
+                    if(todoElement === undefined) {
+                        return;
+                    }
+
+                    todoElement.remove();
+                }
+                else {
+                    console.log("Unbekannter Nachrichtentyp!", parsedMessage);
+                }
+            };
+
+            ws.onerror = () => console.log("Websocket error!");
+            ws.onclose = () => console.log("Websocket closed!");
+        });
+
+        function renderTodoItem(itemToRender) {
+            // Erzeuge ein neues li element
+            const todoItem = document.createElement("li");
+            // Füge text zum neuen Element hinzu
+            todoItem.textContent = itemToRender.title;
+
+            // Die ID des TodoItems an das HTML-Element anhängen
+            // Dadurch können späteren click-events dem TodoItem zugewisen werden
+            todoItem.setAttribute("data-id", itemToRender.id);
+
+            todoItem.addEventListener("click",removeTodoItem);
+
+            // Füge neues Element dem DOM hinzu
+            const todoList = document.querySelector("ul");
+            todoList.append(todoItem);
+        }
+
+        async function addTodoItem() {
+            // Hole das input element in dem der Text steht
+            const todoInput = document.querySelector("body > input[type=text]");
+            // Hole den text aus dem input element
+            const todoTitle = todoInput.value;
+
+            // Gibt es überhaupt eine Eingabe?
+            if(todoTitle === "") {
+                return;
+            }
+
+            // Auf Basis der Eingabe eine neue TodoItem Datenstruktur erzeugen
+            var newTodoItem = {
+                title: todoTitle,
+                id: window.nanoid(),
+                created: new Date().toISOString(),
+            };
+
+            // Neues item im Backend persistieren
+            const newTodoItemAdded = await addItemToBackend(newTodoItem);
+
+            // Wenn das hinzufügen fehlgeschlagen ist, einen Fehler anzeigen
+            if(!newTodoItemAdded) {
+                alert("Failed to add new todo item!");
+                return; // "return early" um die weitere Verarbeitung der Funktion zu verhindern
+            }
+
+            // Das neue TodoItem rendern und ins DOM einhängen
+            renderTodoItem(newTodoItem);
+
+            // Reset input feld
+            todoInput.value = "";
+        }
+
+        async function removeTodoItem(eventData) {
+            const itemToRemove = eventData.target;
+            // ID des zu löschenden Elements aus dem DOM holen
+            const itemId = itemToRemove.getAttribute("data-id");
+            // TodoItem aus dem Backend entfernen
+            const isDeleted = await deleteItemFromBackend(itemId);
+
+            // Wenn das löschen fehlgeschlagen ist, einen Fehler anzeigen
+            if(!isDeleted) {
+                alert("Failed to delete item!");
+                return;
+            }
+            
+            // Wenn alles geklappt hat, das TodoItem aus dem DOM entfernen
+            itemToRemove.remove();
+        }
+
+        // TodoItems vom Backend laden
+        async function loadItemsFromBackend() {
+            // HTTP GET request senden
+            const response = await fetch("/api/v1/todos");
+
+            // Antwort als JSON interpretieren
+            const todoList = await response.json();
+
+            return todoList;
+        }
+
+        // Ein neues TodoItem im Backend speichern
+        async function addItemToBackend(newTodoItem) {
+            // Neus TodoItem in einen JSON String umwandeln
+            const payload = JSON.stringify(newTodoItem);
+
+            // HTTP POST request ans Backend schicken mit dem JSON String als payload
+            const response = await fetch("/api/v1/todos", {
+                method: "POST",
+                body: payload,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            // Rückgabe ob das hinzufügen erfoglreich war
+            return response.status === 200;
+        }
+
+        async function deleteItemFromBackend(idToDelete) {
+            // Die id des zu löschenden TodoItems an die URL anhängen
+            const deleteUrl = `/api/v1/todos/${idToDelete}`;
+
+            // HTTP DELETE request an die URL schicken
+            const response = await fetch(deleteUrl, {
+                method: "DELETE",
+            });
+
+            // Rückgabe ob das löschen erfolgreich war oder nicht
+            return response.status === 200;
+        }
+    </script>
+</body>
+</html>
