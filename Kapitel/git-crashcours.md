@@ -223,7 +223,7 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
 * Anschließend können Sie dort neue Repositories anlegen, diese sind immer mit ihrem Account verbunden.
 * Um anderen Teammitgliedern ebenfalls (schreibenden) Zugriff auf das Repository zu ermöglichen, müssen Sie deren Accounts in den "Repository Settings" unter "Manage Access" in ihr Repository einladen.
 ### HTTP(S)
-* Wenn Sie zum klonen ihres GitHub-Repository die HTTPS-URL wählen, fragt Sie der git client auf der Kommandozeile nach ihrem GitHub Benutzer und Passwort.
+* Wenn Sie zum klonen ihres GitHub-Repository die HTTPS-URL wählen, fragt Sie der git client auf der Kommandozeile nach ihrem GitHub Benutzer und [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 * Dieses müssen Sie bei jeder Interaktion mit dem remote-repository erneut eintippen.
 ### SSH
 * Mittels SSH ist es möglich, SSH-Public-Key-Authentication mit GitHub zu nutzen. Hier muss nur einmalig ein Passwort eingegeben werden, um ihren SSH-Private-Key zu entschlüsseln.
