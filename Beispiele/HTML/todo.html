@@ -1,11 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>Meine Todo App</h1>
+        <input type="text" name="text" id="todo-input" />
+        <button id="todo-add-button">Todo Hinzufügen</button>
+        <ul id="todo-list">
+            <li>Todo 1</li>
+            <li>Todo 2</li>
+            <li>Todo 3</li>
+            <li>Todo 4</li>
+        </ul>
+        <script>
+            document.addEventListener("DOMContentLoaded",
+            () => {
+                initApp();
+            });
+
+            function initApp() {
+                console.log("Unsere app initialisieren.");
+
+                // Registriere click event auf Todo Items
+                const todoItems = document.querySelectorAll("#todo-list li");
+
+                todoItems.forEach((item) => {
+                    item.addEventListener(
+                        "click",
+                        (ev) => ev.currentTarget.remove()
+                    );
+                });
+
+                // Registriere click event auf "Todo Hinzufügen" button
+                const addButton = document.getElementById("todo-add-button");
+                addButton.addEventListener("click", () => {
+                    addTodoItemToTodoList();
+                    clearTodoInput();
+                });
+            }
+
+            function addTodoItemToTodoList() {
+                const todoInput = document.getElementById("todo-input");
+                const todoText = todoInput.value;
+
+                if(todoText === "") {
+                    return;
+                }
+
+                const todoItem = document.createElement("li");
+                todoItem.innerText = todoText;
+
+                todoItem.addEventListener("click", () => {
+                    console.log("Lösche jezt das Item mit dem text=" + todoItem.innerText);
+                    todoItem.remove();
+                });
+
+                const todoList = document.getElementById("todo-list");
+                todoList.appendChild(todoItem);
+            }
+
+            function clearTodoInput() {
+                document.getElementById("todo-input").value = "";
+            }
+        </script>
+    </body>
 </html>
