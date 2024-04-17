@@ -251,6 +251,7 @@ Auf GitHub gibt es eine umfangreiche Sammlung an default `.gitignore` files für
 ## Was bleibt
 * Commit fast, commit early!
    * Es gibt niemals zuviele Commits, immer nur zu wenige!
+* [Oh My Git](https://ohmygit.org): OpenSource git learning game.
 * Interaktiver JavaScript Git-Course: https://learngitbranching.js.org/?locale=de_DE
 * Üben, Üben, Üben!
    * Erzeugen Sie lokale repositories, probieren Sie Sachen aus
