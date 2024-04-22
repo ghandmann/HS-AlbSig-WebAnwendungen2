@@ -4,8 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
-</head>
+    <style>
+        ul li {
+           cursor: pointer; 
+        }
+    </style>
+    <link href="https://bootswatch.com/5/quartz/bootstrap.min.css" rel="stylesheet">
+    </head>
 <body>
-    <p>Diese Seite ist an Platzhalter für die zu erzeugende Todo-Web-App.</p>
+    <div class="container">
+        <h1>Todo App</h1>
+        <div class="input-group mb-3">
+            <input class="form-control" type="text" id="todo-title-text" name="todo-title" />
+            <button class="btn btn-success" id="add-todo-btn">Todo speichern</button>
+        </div>  
+    
+        
+        <ul class="list-group" id="todo-list">
+        </ul>
+    </div>
+
+    <script>
+        var todoItems = [];
+
+        document.addEventListener("DOMContentLoaded", main);
+
+        function main() {
+            console.log("main funktion aufgerufen. Todo app wird initialisiert.");
+
+            let saveBtn = document.getElementById("add-todo-btn");
+            saveBtn.addEventListener("click", saveTodoItem);
+
+            let persistedItemsJsonString = localStorage.getItem("todo-items");
+            if(persistedItemsJsonString == undefined) {
+                return;
+            }
+
+            let persistedItems = JSON.parse(persistedItemsJsonString);
+            todoItems = persistedItems;
+
+            todoItems.forEach(renderTodoItem);
+        }
+
+        function saveTodoItem() {
+            let titleInput = document.getElementById("todo-title-text");
+            let title = titleInput.value;
+
+            if(title === "") {
+                return;
+            }
+
+            todoItems.push(title);
+            localStorage.setItem("todo-items", JSON.stringify(todoItems));
+
+            renderTodoItem(title);
+
+            titleInput.value = "";
+        }
+
+        function renderTodoItem(todoItemTitle) {
+            let newTodoItem = document.createElement("li");
+            newTodoItem.innerText = todoItemTitle;
+            newTodoItem.classList.add("list-group-item");
+            newTodoItem.classList.add("list-group-item-warning");
+
+            newTodoItem.addEventListener("click", () => {
+                newTodoItem.remove();
+                newListOfTodoItems = todoItems.filter((candidate) => todoItemTitle !== candidate);
+                todoItems = newListOfTodoItems;
+                localStorage.setItem("todo-items", JSON.stringify(todoItems));
+            });
+
+            let todoList = document.getElementById("todo-list");
+            todoList.appendChild(newTodoItem);
+        }
+    </script>
 </body>
 </html>
