@@ -1,134 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            .can-be-deleted {
-                cursor: pointer;
-            }
-        </style>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
-        <script type="module">
-            import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
-            // make nanoid globally available
-            window.nanoid = nanoid;
-        </script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <style>
+        ul li {
+           cursor: pointer; 
+        }
+    </style>
+    <link href="https://bootswatch.com/5/quartz/bootstrap.min.css" rel="stylesheet">
     </head>
-    <body>
-        <div class="container">
-            <h1>Meine Todo App</h1>
-            <div class="input-group mb-3">
-                <input class="form-control" type="text" name="text" id="todo-input" />
-                <button class="form-control btn btn-success" id="todo-add-button">Todo Hinzufügen</button>
-            </div>
-            <ul id="todo-list" class="list-group">
-            </ul>
-        </div>
-        <script>
-            document.addEventListener("DOMContentLoaded",
-            async () => {
-                await initApp();
+<body>
+    <script type="module">
+        import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
+        // make nanoid globally available
+        window.nanoid = nanoid;
+    </script>
+    <div class="container">
+        <h1>Todo App</h1>
+        <div class="input-group mb-3">
+            <input class="form-control" type="text" id="todo-title-text" name="todo-title" />
+            <button class="btn btn-success" id="add-todo-btn">Todo speichern</button>
+        </div>  
+    
+        
+        <ul class="list-group" id="todo-list">
+        </ul>
+    </div>
+
+    <script>
+        var todoItems = [];
+
+        document.addEventListener("DOMContentLoaded", main);
+
+        async function main() {
+            console.log("main funktion aufgerufen. Todo app wird initialisiert.");
+
+            let saveBtn = document.getElementById("add-todo-btn");
+            saveBtn.addEventListener("click", saveTodoItem);
+
+            let response = await fetch("/todo-items/");
+            todoItems = await response.json();
+
+            todoItems.forEach(renderTodoItem);
+        }
+
+        async function saveTodoItem() {
+            let titleInput = document.getElementById("todo-title-text");
+            let title = titleInput.value;
+
+            if(title === "") {
+                return;
+            }
+
+            let newTodoItem = {
+                title: title,
+                created: new Date(),
+                id: nanoid(),
+            };
+
+            let response = await fetch("/todo-items/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newTodoItem),
             });
 
-            async function initApp() {
-                console.log("Unsere app initialisieren.");
-
-                let response = await fetch("/todo-items/");
-                let todoItemsFromBackend = await response.json();
-                todoItemsFromBackend.forEach((item) => addTodoItemToTodoList(item));
-
-                // Registriere click event auf Todo Items
-                const todoItems = document.querySelectorAll("#todo-list li");
-
-                todoItems.forEach((item) => {
-                    item.addEventListener(
-                        "click",
-                        (ev) => ev.currentTarget.remove()
-                    );
-                });
-
-                // Registriere click event auf "Todo Hinzufügen" button
-                const addButton = document.getElementById("todo-add-button");
-                addButton.addEventListener("click", () => {
-                    sendNewTodoItemToBackend();
-                    clearTodoInput();
-                });
+            if(response.status != 200) {
+                alert("failed to save todo item");
+                return;
             }
 
-            async function sendNewTodoItemToBackend() {
-                let textInput = document.getElementById("todo-input");
-                let newTodoItemTitle = textInput.value;
+            titleInput.value = "";
 
-                if(newTodoItemTitle === "") {
-                    return;
-                }
+            renderTodoItem(newTodoItem);
+        }
 
-                let newTodoItemPayload = {
-                    id: window.nanoid(),
-                    title: newTodoItemTitle,
-                    createdAt: new Date().toString(),
-                };
+        function renderTodoItem(todoItem) {
+            let newTodoItem = document.createElement("li");
+            newTodoItem.innerText = todoItem.title;
+            newTodoItem.classList.add("list-group-item");
+            newTodoItem.classList.add("list-group-item-warning");
 
-                let response = await fetch("/todo-items/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newTodoItemPayload),
-                });
-
-                if(response.status !== 200) {
-                    alert("Failed to store item in backend");
-                    return;
-                }
-
-                addTodoItemToTodoList(newTodoItemPayload);
-            }
-
-            function addTodoItemToTodoList(newTodoItem) {
-                const todoText = newTodoItem.title;
-
-                if(todoText === "") {
-                    return;
-                }
-
-                const todoItem = document.createElement("li");
-                todoItem.innerText = todoText;
-                todoItem.classList.add("list-group-item");
-                todoItem.classList.add("list-group-item-primary");
-                todoItem.classList.add("can-be-deleted");
-
-                todoItem.addEventListener("click", () => {
-                    console.log("Lösche jezt das Item mit dem text=" + todoItem.innerText);
-                    const itemDeleted = deleteTodoItemFromBackend(newTodoItem.id);
-                    if(itemDeleted) {
-                        todoItem.remove();
-                    }
-                });
-
-                const todoList = document.getElementById("todo-list");
-                todoList.appendChild(todoItem);
-            }
-
-            async function deleteTodoItemFromBackend(idToDelete) {
-                const deleteUrl = "/todo-items/" + idToDelete;
-                var response = await fetch(deleteUrl, {
+            newTodoItem.addEventListener("click", async () => {
+                let deleteUrl = "/todo-items/" + todoItem.id;
+                let response = await fetch(deleteUrl, {
                     method: "DELETE",
                 });
 
-                if(response.status !== 200) {
-                    alert("Could not delete item");
-                    return false;
+                if(response.status != 200) {
+                    alert("Failed to delete item");
+                    return;
                 }
 
-                return true;
-            }
+                newTodoItem.remove();
+            });
 
-            function clearTodoInput() {
-                document.getElementById("todo-input").value = "";
-            }
-        </script>
-    </body>
+            let todoList = document.getElementById("todo-list");
+            todoList.appendChild(newTodoItem);
+        }
+    </script>
+</body>
 </html>
