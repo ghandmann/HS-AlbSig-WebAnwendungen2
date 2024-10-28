@@ -1,83 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script lang="script">
+        document.addEventListener("DOMContentLoaded", weAreReady);
+
+        function weAreReady() {
+            const addTodoItemButton = document.getElementById("new-todo-item-button");
+            
+            addTodoItemButton.addEventListener("click", () => {
+                const newTodoInput = document.getElementById("new-todo-item-input");
+                const newTodoItemTitle = newTodoInput.value;
+
+                const nothingTodo = newTodoItemTitle === "";
+                if(nothingTodo) {
+                    return;
+                }
+
+                renderTodoItem(newTodoItemTitle);
+
+                saveTodoItems(newTodoItemTitle);
+
+                newTodoInput.value = "";
+            });
+
+            const restoredTodoItems = loadTodoItemsFromLocalStorage();
+
+            restoredTodoItems.forEach(
+                (itemTitle) => {
+                    renderTodoItem(itemTitle);
+                }
+            );
+        }
+
+        function renderTodoItem(itemTitle) {
+            const newListItem = document.createElement("li");
+            newListItem.innerText = itemTitle;
+
+            newListItem.addEventListener("click", () => {
+                removeFromLocalStorage(newListItem.innerText);
+                newListItem.remove();
+            });
+
+            const todoList = document.getElementById("todo-list");
+            todoList.append(newListItem);
+        }
+
+        function saveTodoItems(todoItem) {
+            const savedItemsText = window.localStorage.getItem("todo-items");
+
+            let todoItems = [];
+            if(savedItemsText !== null) {
+                todoItems = JSON.parse(savedItemsText);
+            }
+            
+            todoItems.push(todoItem);
+            window.localStorage.setItem("todo-items", JSON.stringify(todoItems));
+        }
+
+        function loadTodoItemsFromLocalStorage() {
+            const savedItemsText = window.localStorage.getItem("todo-items");
+
+            let todoItems = [];
+            if(savedItemsText !== null) {
+                todoItems = JSON.parse(savedItemsText);
+            }
+
+            return todoItems;
+        }
+
+        function removeFromLocalStorage(itemTitle) {
+            let todoItems = loadTodoItemsFromLocalStorage();
+
+            let filteredTodoItems = todoItems.filter(
+                (candidateTitle) => {
+                    return candidateTitle !== itemTitle;
+                }
+            );
+
+            window.localStorage.setItem("todo-items", JSON.stringify(filteredTodoItems));
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
     <style>
-        ul li {
-           cursor: pointer; 
+        li {
+            cursor: pointer;
         }
     </style>
-    <link href="https://bootswatch.com/5/quartz/bootstrap.min.css" rel="stylesheet">
-    </head>
+
+</head>
 <body>
-    <div class="container">
-        <h1>Todo App</h1>
-        <div class="input-group mb-3">
-            <input class="form-control" type="text" id="todo-title-text" name="todo-title" />
-            <button class="btn btn-success" id="add-todo-btn">Todo speichern</button>
-        </div>  
+    <input type="text" id="new-todo-item-input" name="new-todo-title" />
+    <button id="new-todo-item-button">Todo hinzufügen</button>
     
-        
-        <ul class="list-group" id="todo-list">
-        </ul>
-    </div>
-
-    <script>
-        var todoItems = [];
-
-        document.addEventListener("DOMContentLoaded", main);
-
-        function main() {
-            console.log("main funktion aufgerufen. Todo app wird initialisiert.");
-
-            let saveBtn = document.getElementById("add-todo-btn");
-            saveBtn.addEventListener("click", saveTodoItem);
-
-            let persistedItemsJsonString = localStorage.getItem("todo-items");
-            if(persistedItemsJsonString == undefined) {
-                return;
-            }
-
-            let persistedItems = JSON.parse(persistedItemsJsonString);
-            todoItems = persistedItems;
-
-            todoItems.forEach(renderTodoItem);
-        }
-
-        function saveTodoItem() {
-            let titleInput = document.getElementById("todo-title-text");
-            let title = titleInput.value;
-
-            if(title === "") {
-                return;
-            }
-
-            todoItems.push(title);
-            localStorage.setItem("todo-items", JSON.stringify(todoItems));
-
-            renderTodoItem(title);
-
-            titleInput.value = "";
-        }
-
-        function renderTodoItem(todoItemTitle) {
-            let newTodoItem = document.createElement("li");
-            newTodoItem.innerText = todoItemTitle;
-            newTodoItem.classList.add("list-group-item");
-            newTodoItem.classList.add("list-group-item-warning");
-
-            newTodoItem.addEventListener("click", () => {
-                newTodoItem.remove();
-                newListOfTodoItems = todoItems.filter((candidate) => todoItemTitle !== candidate);
-                todoItems = newListOfTodoItems;
-                localStorage.setItem("todo-items", JSON.stringify(todoItems));
-            });
-
-            let todoList = document.getElementById("todo-list");
-            todoList.appendChild(newTodoItem);
-        }
-    </script>
+    <ul id="todo-list">
+    </ul>
 </body>
 </html>
+
+
