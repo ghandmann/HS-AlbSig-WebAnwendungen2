@@ -1,102 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script lang="script">
-        document.addEventListener("DOMContentLoaded", weAreReady);
-
-        function weAreReady() {
-            const addTodoItemButton = document.getElementById("new-todo-item-button");
-            
-            addTodoItemButton.addEventListener("click", () => {
-                const newTodoInput = document.getElementById("new-todo-item-input");
-                const newTodoItemTitle = newTodoInput.value;
-
-                const nothingTodo = newTodoItemTitle === "";
-                if(nothingTodo) {
-                    return;
-                }
-
-                renderTodoItem(newTodoItemTitle);
-
-                saveTodoItems(newTodoItemTitle);
-
-                newTodoInput.value = "";
-            });
-
-            const restoredTodoItems = loadTodoItemsFromLocalStorage();
-
-            restoredTodoItems.forEach(
-                (itemTitle) => {
-                    renderTodoItem(itemTitle);
-                }
-            );
-        }
-
-        function renderTodoItem(itemTitle) {
-            const newListItem = document.createElement("li");
-            newListItem.innerText = itemTitle;
-
-            newListItem.addEventListener("click", () => {
-                removeFromLocalStorage(newListItem.innerText);
-                newListItem.remove();
-            });
-
-            const todoList = document.getElementById("todo-list");
-            todoList.append(newListItem);
-        }
-
-        function saveTodoItems(todoItem) {
-            const savedItemsText = window.localStorage.getItem("todo-items");
-
-            let todoItems = [];
-            if(savedItemsText !== null) {
-                todoItems = JSON.parse(savedItemsText);
-            }
-            
-            todoItems.push(todoItem);
-            window.localStorage.setItem("todo-items", JSON.stringify(todoItems));
-        }
-
-        function loadTodoItemsFromLocalStorage() {
-            const savedItemsText = window.localStorage.getItem("todo-items");
-
-            let todoItems = [];
-            if(savedItemsText !== null) {
-                todoItems = JSON.parse(savedItemsText);
-            }
-
-            return todoItems;
-        }
-
-        function removeFromLocalStorage(itemTitle) {
-            let todoItems = loadTodoItemsFromLocalStorage();
-
-            let filteredTodoItems = todoItems.filter(
-                (candidateTitle) => {
-                    return candidateTitle !== itemTitle;
-                }
-            );
-
-            window.localStorage.setItem("todo-items", JSON.stringify(filteredTodoItems));
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <style>
-        li {
+        .hidden-todo {
+            display: none;
+        }
+
+        ul li.list-group-item {
             cursor: pointer;
         }
     </style>
-
 </head>
 <body>
-    <input type="text" id="new-todo-item-input" name="new-todo-title" />
-    <button id="new-todo-item-button">Todo hinzufügen</button>
-    
-    <ul id="todo-list">
-    </ul>
+    <div class="container">
+        <h1>Todo App</h1>
+
+        <div class="input-group mb-3">
+            <input type="text" name="title" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" id="add-todo-button" type="button" id="button-addon2">Button</button>
+        </div>
+
+        <ul class="list-group" id="todo-item-container">
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", init);
+
+        function init() {
+            const addTodoButton = document.getElementById("add-todo-button");
+            addTodoButton.addEventListener("click", handleTodoButtonClicked);
+
+            const titleInput = getTitleInput();
+            titleInput.addEventListener("keydown", handleInputTitleKeydown);
+        }
+
+        function handleTodoButtonClicked() {
+            addTodoItemAndClearInput();
+        }
+
+        function handleInputTitleKeydown(keydownEvent) {
+            const key = keydownEvent.key;
+            if(key === "Enter") {
+                addTodoItemAndClearInput();
+            }
+        }
+
+        function addTodoItemAndClearInput() {
+            addTodoItem();
+            clearTitle();
+        }
+
+        function addTodoItem() {
+            const todoTitleInput = getTitleInput();
+            const todoItemTitle = todoTitleInput.value;
+
+            if(todoItemTitle === "") {
+                return;
+            }
+
+            const todoItem = document.createElement("li");
+            todoItem.classList.add("list-group-item");
+            todoItem.textContent = todoItemTitle;
+            todoItem.addEventListener("click", () => {
+                removeTodoItem(todoItem);
+            });
+
+            const todoList = document.getElementById("todo-item-container");
+            todoList.appendChild(todoItem);
+        }
+
+        function removeTodoItem(todoItem) {
+            todoItem.remove();
+        }
+
+        function clearTitle() {
+            const titleInput = getTitleInput();
+            titleInput.value = "";
+        }
+
+        function getTitleInput() {
+            return document.querySelector('input[name="title"]');
+        }
+    </script>
 </body>
 </html>
-
-
