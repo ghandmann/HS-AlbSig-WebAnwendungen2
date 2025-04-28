@@ -23,7 +23,7 @@ app.post("/v1/todo-items/", (req, res) => {
     const todoItem = req.body;
 
     const newId = todoItem.id;
-    const alreadyExists = app.inMemoryStore.filter((candiate) => candiate.id == newId).length == 1;
+    const alreadyExists = app.inMemoryStore.filter((candidate) => candidate.id == newId).length == 1;
     if(alreadyExists) {
         return res.status(409).send("item with id already exists");
     }
@@ -35,9 +35,11 @@ app.post("/v1/todo-items/", (req, res) => {
 
 // Löschen eines Todo-Items
 app.delete("/v1/todo-items/:id", (req, res) => {
+    const idToDelete = req.params.id;
+
     const filteredList = app.inMemoryStore.filter(
         (candidate) => {
-            return candidate.id != req.params.id;
+            return candidate.id != idToDelete;
     });
 
     app.inMemoryStore = filteredList;
