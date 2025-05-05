@@ -3,9 +3,9 @@ Dieser Ordner ist ein Platzhalter für die kommende Entwicklung eines einfachen 
 
 ## REST API
 
-* `GET /api/v1/todos` Listet alle Todo Items auf
-* `POST /api/v1/todos` Fügt ein neues Todo hinzu
-* `DELETE /api/v1/todos/:itemid` Löscht das Todo mit der entsprechenden ID
+* `GET /v1/todos` Listet alle Todo Items auf
+* `POST /v1/todos` Fügt ein neues Todo hinzu
+* `DELETE /v1/todos/:itemid` Löscht das Todo mit der entsprechenden ID
 
 ## Datenmodel
 
