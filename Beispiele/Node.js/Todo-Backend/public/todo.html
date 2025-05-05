@@ -26,7 +26,8 @@
 
         <div class="input-group mb-3">
             <input type="text" name="title" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn btn-outline-secondary" id="add-todo-button" type="button" id="button-addon2">Button</button>
+            <button class="btn btn-outline-secondary" id="add-todo-button" type="button" id="button-addon2">Todo Hinzufügen</button>
+            <button class="btn btn-outline-secondary" id="reload-todo-items-button" type="button">Reload</button>
         </div>
 
         <ul class="list-group" id="todo-item-container">
@@ -36,14 +37,70 @@
     <script>
         document.addEventListener("DOMContentLoaded", init);
 
-        function init() {
+        async function init() {
+            registerEventHandler();
+            await loadTodoItemsFromBackend();
+        }
+
+        function registerEventHandler() {
             const addTodoButton = document.getElementById("add-todo-button");
             addTodoButton.addEventListener("click", handleTodoButtonClicked);
 
             const titleInput = getTitleInput();
             titleInput.addEventListener("keydown", handleInputTitleKeydown);
 
-            // Load todo items from backend...
+            const reloadButton = document.getElementById("reload-todo-items-button");
+            reloadButton.addEventListener("click", reloadTodoItemsList);
+        }
+
+        async function reloadTodoItemsList() {
+            clearTodoItemsList();
+            await loadTodoItemsFromBackend();
+        }
+
+        function clearTodoItemsList() {
+            const todoItemsList = document.getElementById("todo-item-container");
+            todoItemsList.innerHTML = '';
+        }
+
+        async function loadTodoItemsFromBackend() {
+            const todoItemsResponse = await fetch("/v1/todo-items");
+            const todoItems = await todoItemsResponse.json();
+            renderTodoItemsList(todoItems);
+        }
+
+        function renderTodoItemsList(todoItems) {
+            todoItems.forEach((todoItem) => {
+                const liElement = renderTodoItem(todoItem);
+                
+                const todoList = document.getElementById("todo-item-container");
+                todoList.appendChild(liElement);
+            });
+        }
+
+        function renderTodoItem(todoItem) {
+            const title = todoItem.title;
+
+            const liElement = document.createElement("li");
+            liElement.classList.add("list-group-item");
+            liElement.textContent = title;
+            liElement.addEventListener("click", async () => {
+                removeTodoItem(liElement);
+                await deleteTodoItemFromBackend(todoItem.id);
+            });
+
+            return liElement;
+        }
+
+        async function deleteTodoItemFromBackend(idToDelete) {
+            const deleteUrl = `/v1/todo-items/${idToDelete}`;
+            const res = await fetch(deleteUrl, {
+                method: "DELETE"
+            });
+
+            if(res.status !== 200) {
+                alert("failed to delete todo-item with id=" . idToDelete);
+            }
         }
 
         async function handleTodoButtonClicked() {
@@ -70,15 +127,11 @@
                 return;
             }
 
-            const todoItem = document.createElement("li");
-            todoItem.classList.add("list-group-item");
-            todoItem.textContent = todoItemTitle;
-            todoItem.addEventListener("click", () => {
-                removeTodoItem(todoItem);
-            });
+            const todoItem = { title: todoItemTitle };
+            const liElement = renderTodoItem(todoItem);
 
             const todoList = document.getElementById("todo-item-container");
-            todoList.appendChild(todoItem);
+            todoList.appendChild(liElement);
 
             await storeTodoItemInBackend(todoItemTitle);
         }
@@ -97,6 +150,10 @@
                 },
                 body: JSON.stringify(todoItem)
             });
+
+            if(res.status !== 200) {
+                alert("Failed to transmit todo-item to backend");
+            }
         }
 
         function removeTodoItem(todoItem) {
