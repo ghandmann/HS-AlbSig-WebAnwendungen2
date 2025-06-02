@@ -15,12 +15,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 let todoInMemoryStore = [];
 
 // Alle Todos auslesen
-app.get("/api/v1/todos", (req, res) => {
+app.get("/v1/todo-items", (req, res) => {
     return res.send(todoInMemoryStore);
 });
 
 // Todo speichern
-app.post("/api/v1/todos", (req, res) => {
+app.post("/v1/todo-items", (req, res) => {
     var newTodoItem = req.body;
     todoInMemoryStore.push(newTodoItem);
     broadcastTodoItemCreated(newTodoItem);
@@ -28,7 +28,7 @@ app.post("/api/v1/todos", (req, res) => {
 });
 
 // Todo löschen
-app.delete("/api/v1/todos/:todoId", (req, res) => {
+app.delete("/v1/todo-items/:todoId", (req, res) => {
     const id = req.params["todoId"]; // Muss Namen in URL matchen
 
     todoInMemoryStore = todoInMemoryStore.filter(item => item.id != id);
