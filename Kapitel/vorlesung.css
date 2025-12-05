@@ -1,0 +1,66 @@
+/* @theme vorlesung */
+
+@import 'gaia';
+
+section {
+    font-size: 23pt;
+}
+section h1, section h2 {
+    color: #566691ff;
+}
+
+section.lead {
+    h1 {
+        font-size: 64pt;
+    }
+}
+section {
+    padding: 40px;
+    padding-top: 20px;
+}
+section h1 {
+    font-size: 38pt;
+}
+
+section h2 {
+    font-size: 28pt;
+}
+
+section.chapter {
+    h1 {
+        margin-top: 20%;
+    }
+
+    h1, h2 {
+        text-align: center;
+    }
+}
+
+img[alt~="center"] {
+    margin: auto;
+    display: block;
+}
+
+footer, section::after {
+    font-size: 0.6em;
+    border-top: solid 1px rgb(160, 168, 187);
+    height: 40px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 38px;
+}
+section::after {
+    font-weight: bold;
+}
+
+section.lead footer, section.chapter footer {
+    display: none;
+}
+section.lead::after, section.chapter::after {
+    display: none;
+}
+
+section.image-only footer, section.image-only::after {
+	display: none;
+}
+
