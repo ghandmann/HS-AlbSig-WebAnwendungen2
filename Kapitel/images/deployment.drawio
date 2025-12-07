@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
   <diagram name="Seite-1" id="PLpnKzHl6X9FZuoggsZm">
-    <mxGraphModel dx="2893" dy="1215" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3258" dy="1429" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -419,11 +419,134 @@
             <mxPoint y="-13" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="SULLpAiLVzgCZvVr4B8b-155" value="ReverseProxy" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.proxy_server;fontSize=16;" vertex="1" parent="1">
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-155" value="ReverseProxy" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.proxy_server;fontSize=16;labelBorderColor=none;labelBackgroundColor=none;textShadow=0;html=1;" vertex="1" parent="1">
           <mxGeometry x="321.84" y="2480" width="136" height="160" as="geometry" />
         </mxCell>
         <mxCell id="SULLpAiLVzgCZvVr4B8b-156" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
           <mxGeometry x="710" y="2480" width="136" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-160" value="Öffentliches Netz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;fontSize=15;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="-25.05" y="2440" width="405.05" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-161" value="Privates Netz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;fontSize=15;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="2440" width="460" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-162" value="LoadBalancer Setup" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=18;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="-40" y="2760" width="920" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-163" value="Client" style="sketch=0;verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;fillColor=#000000;align=center;outlineConnect=0;pointerEvents=1;shape=mxgraph.citrix2.desktop;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="2.16" y="2985" width="90.09" height="69.66" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-164" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" target="SULLpAiLVzgCZvVr4B8b-168">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="102.16" y="3025" as="sourcePoint" />
+            <mxPoint x="239.16" y="3021.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-165" value="HTTP-Request/Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;fontSize=16;" vertex="1" connectable="0" parent="SULLpAiLVzgCZvVr4B8b-164">
+          <mxGeometry x="-0.2974" y="-2" relative="1" as="geometry">
+            <mxPoint x="21" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-168" value="LoadBalancer" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.proxy_server;fontSize=16;labelBorderColor=none;labelBackgroundColor=none;textShadow=0;html=1;" vertex="1" parent="1">
+          <mxGeometry x="333.99999999999994" y="2945" width="136" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-177" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-169">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="3025" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-169" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="2840" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-170" value="Öffentliches Netz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;fontSize=15;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="-12.889999999999954" y="2905" width="405.05" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-171" value="Privates Netz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;fontSize=15;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="414" y="2810" width="406" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-178" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-175" target="SULLpAiLVzgCZvVr4B8b-168">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-175" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="2980" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-179" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-176">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="3020" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-176" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="3120" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-180" value="HighAvailability Setup" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=18;fillColor=#f9f7ed;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="-40" y="3360" width="920" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-181" value="Client" style="sketch=0;verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;fillColor=#000000;align=center;outlineConnect=0;pointerEvents=1;shape=mxgraph.citrix2.desktop;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="14.550000000000082" y="3497.67" width="90.09" height="69.66" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-182" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" target="SULLpAiLVzgCZvVr4B8b-184" source="SULLpAiLVzgCZvVr4B8b-181">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="102.16000000000008" y="3625" as="sourcePoint" />
+            <mxPoint x="239.16000000000008" y="3621.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-183" value="HTTP-Request/Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;fontSize=16;" vertex="1" connectable="0" parent="SULLpAiLVzgCZvVr4B8b-182">
+          <mxGeometry x="-0.2974" y="-2" relative="1" as="geometry">
+            <mxPoint x="21" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-184" value="LoadBalancer A" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.proxy_server;fontSize=16;labelBorderColor=none;labelBackgroundColor=none;textShadow=0;html=1;" vertex="1" parent="1">
+          <mxGeometry x="361.62" y="3485" width="80.75" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-185" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;entryX=0.533;entryY=0.288;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-186" target="SULLpAiLVzgCZvVr4B8b-180">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="3500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-186" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="3440" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-187" value="Öffentliches Netz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;fontSize=15;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="-12.89" y="3470" width="405.05" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-188" value="Privates Netz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;fontSize=15;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="3405" width="406" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-189" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-190" target="SULLpAiLVzgCZvVr4B8b-184">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-190" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="3580" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-192" value="Backend Server" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="3720" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-193" value="LoadBalancer B" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.proxy_server;fontSize=16;labelBorderColor=none;labelBackgroundColor=none;textShadow=0;html=1;" vertex="1" parent="1">
+          <mxGeometry x="359.63" y="3635" width="80.75" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-199" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-194" target="SULLpAiLVzgCZvVr4B8b-193">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-200" value="HTTP-Request/Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;labelBackgroundColor=none;" vertex="1" connectable="0" parent="SULLpAiLVzgCZvVr4B8b-199">
+          <mxGeometry x="-0.2484" y="2" relative="1" as="geometry">
+            <mxPoint x="19" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-194" value="Client" style="sketch=0;verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;fillColor=#000000;align=center;outlineConnect=0;pointerEvents=1;shape=mxgraph.citrix2.desktop;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="14.449999999999996" y="3645.17" width="90.09" height="69.66" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-195" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.533;entryY=0.577;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-186" target="SULLpAiLVzgCZvVr4B8b-180">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-196" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.543;entryY=0.615;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-190" target="SULLpAiLVzgCZvVr4B8b-180">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-197" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.554;entryY=0.692;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-192" target="SULLpAiLVzgCZvVr4B8b-180">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SULLpAiLVzgCZvVr4B8b-198" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.533;entryY=0.404;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SULLpAiLVzgCZvVr4B8b-192" target="SULLpAiLVzgCZvVr4B8b-180">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

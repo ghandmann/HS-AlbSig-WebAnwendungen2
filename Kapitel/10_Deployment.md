@@ -471,6 +471,6 @@ Siehe `$repo/Beispiele/Deployment/VirtualHosting/README.md`
 - Deshalb sollte man mindestens:
   - Die Software aktuell halten
   - Die Angriffsläche so klein wie möglich halten
-  - Nur Dienste öffentlich anbieten, die man bereite ist auch zu "verlieren"
+  - Nur Dienste öffentlich anbieten, die man bereit ist auch zu "verlieren"
   - Server und Serverdienste "hardenen"
 - Ansonsten: Lesen, Tüfteln, Erfahrung sammeln.
