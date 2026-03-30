@@ -143,6 +143,14 @@ footer: "Web Anwendungen  - Sommersemester 2026"
 
 ---
 
+# HTML: Resourcen
+
+- [Mozilla Developer Network](https://developer.mozilla.org/de/)
+- [w3c Schools](https://www.w3schools.com/)
+- [SelfHTML](https://wiki.selfhtml.org/)
+
+---
+
 <!-- _class: chapter -->
 
 # CSS
