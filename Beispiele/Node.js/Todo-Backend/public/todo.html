@@ -1,174 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Meine Todo App</title>
+
+    <link rel="stylesheet" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+
     <style>
-        .hidden-todo {
-            display: none;
+        li {
+            cursor: pointer;
+            color: blue;
         }
 
-        ul li.list-group-item {
-            cursor: pointer;
+        li:hover {
+            text-decoration: underline;
         }
     </style>
-    <script type="module">
-        import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js';
-        // make nanoid globally available
-        window.nanoid = nanoid;
-    </script>
 </head>
+
 <body>
     <div class="container">
-        <h1>Todo App</h1>
+        <h1>Todo App!</h1>
 
         <div class="input-group mb-3">
-            <input type="text" name="title" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn btn-outline-secondary" id="add-todo-button" type="button" id="button-addon2">Todo Hinzufügen</button>
-            <button class="btn btn-outline-secondary" id="reload-todo-items-button" type="button">Reload</button>
+            <input id="new-todo-title" type="text" class="form-control" placeholder="Recipient’s username" aria-label="Recipient’s username"
+                aria-describedby="basic-addon2">
+            <button type="button" class="btn btn-outline-success" id="add-todo-button">Todo
+            hinzufügen</button>
         </div>
 
-        <ul class="list-group" id="todo-item-container">
+        <ul id="todo-list" class="list-group">
         </ul>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", init);
 
-        async function init() {
-            registerEventHandler();
-            await loadTodoItemsFromBackend();
-        }
+        function init() {
+            const addButton = document.querySelector("#add-todo-button");
+            addButton.addEventListener("click", addTodoButtonClicked);
 
-        function registerEventHandler() {
-            const addTodoButton = document.getElementById("add-todo-button");
-            addTodoButton.addEventListener("click", handleTodoButtonClicked);
-
-            const titleInput = getTitleInput();
-            titleInput.addEventListener("keydown", handleInputTitleKeydown);
-
-            const reloadButton = document.getElementById("reload-todo-items-button");
-            reloadButton.addEventListener("click", reloadTodoItemsList);
-        }
-
-        async function reloadTodoItemsList() {
-            clearTodoItemsList();
-            await loadTodoItemsFromBackend();
-        }
-
-        function clearTodoItemsList() {
-            const todoItemsList = document.getElementById("todo-item-container");
-            todoItemsList.innerHTML = '';
-        }
-
-        async function loadTodoItemsFromBackend() {
-            const todoItemsResponse = await fetch("/v1/todo-items");
-            const todoItems = await todoItemsResponse.json();
-            renderTodoItemsList(todoItems);
-        }
-
-        function renderTodoItemsList(todoItems) {
-            todoItems.forEach((todoItem) => {
-                const liElement = renderTodoItem(todoItem);
-                
-                const todoList = document.getElementById("todo-item-container");
-                todoList.appendChild(liElement);
+            const inputTitle = document.querySelector("#new-todo-title");
+            inputTitle.addEventListener("keydown", (e) => {
+                if (e.key === 'Enter') {
+                    addTodoButtonClicked();
+                }
             });
         }
 
-        function renderTodoItem(todoItem) {
-            const title = todoItem.title;
+        function addTodoButtonClicked() {
+            const titleInput = document.querySelector("#new-todo-title");
+            const title = titleInput.value;
 
-            const liElement = document.createElement("li");
-            liElement.classList.add("list-group-item");
-            liElement.textContent = title;
-            liElement.addEventListener("click", async () => {
-                removeTodoItem(liElement);
-                await deleteTodoItemFromBackend(todoItem.id);
-            });
-
-            return liElement;
-        }
-
-        async function deleteTodoItemFromBackend(idToDelete) {
-            const deleteUrl = `/v1/todo-items/${idToDelete}`;
-            const res = await fetch(deleteUrl, {
-                method: "DELETE"
-            });
-
-            if(res.status !== 200) {
-                alert("failed to delete todo-item with id=" . idToDelete);
-            }
-        }
-
-        async function handleTodoButtonClicked() {
-            await addTodoItemAndClearInput();
-        }
-
-        function handleInputTitleKeydown(keydownEvent) {
-            const key = keydownEvent.key;
-            if(key === "Enter") {
-                addTodoItemAndClearInput();
-            }
-        }
-
-        async function addTodoItemAndClearInput() {
-            await addTodoItem();
-            clearTitle();
-        }
-
-        async function addTodoItem() {
-            const todoTitleInput = getTitleInput();
-            const todoItemTitle = todoTitleInput.value;
-
-            if(todoItemTitle === "") {
+            if (title === "") {
                 return;
             }
 
-            const todoItem = { title: todoItemTitle };
-            const liElement = renderTodoItem(todoItem);
+            const newTodoItem = document.createElement("li");
+            newTodoItem.innerText = title;
+            newTodoItem.addEventListener("click", () => newTodoItem.remove());
+            newTodoItem.classList.add("list-group-item");
 
-            const todoList = document.getElementById("todo-item-container");
-            todoList.appendChild(liElement);
+            const todoList = document.querySelector("#todo-list");
+            todoList.appendChild(newTodoItem);
 
-            await storeTodoItemInBackend(todoItemTitle);
-        }
-
-        async function storeTodoItemInBackend(itemTitle) {
-            const todoItem = {
-                title: itemTitle,
-                id: nanoid(),
-                created: new Date()
-            };
-
-            const res = await fetch("/v1/todo-items", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(todoItem)
-            });
-
-            if(res.status !== 200) {
-                alert("Failed to transmit todo-item to backend");
-            }
-        }
-
-        function removeTodoItem(todoItem) {
-            todoItem.remove();
-            // remove from backend too...
-        }
-
-        function clearTitle() {
-            const titleInput = getTitleInput();
             titleInput.value = "";
-        }
-
-        function getTitleInput() {
-            return document.querySelector('input[name="title"]');
         }
     </script>
 </body>
+
 </html>

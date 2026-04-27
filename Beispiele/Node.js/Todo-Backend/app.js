@@ -20,31 +20,22 @@ app.get("/v1/todo-items/", (req, res) => {
 
 // Neues todo item hinzufügen
 app.post("/v1/todo-items/", (req, res) => {
-    const todoItem = req.body;
+    const newTodoItem = req.body;
 
-    const newId = todoItem.id;
-    const alreadyExists = app.inMemoryStore.filter((candidate) => candidate.id == newId).length == 1;
-    if(alreadyExists) {
-        return res.status(409).send("item with id already exists");
-    }
+    app.inMemoryStore.push(newTodoItem);
 
-    app.inMemoryStore.push(todoItem);
-
-    res.status(200).send("todo item created");
+    res.status(200).send();
 });
 
 // Löschen eines Todo-Items
+// /v1/todo-items/apfel -> id=apfel
+// /v1/todo-items/123 -> id=123
 app.delete("/v1/todo-items/:id", (req, res) => {
     const idToDelete = req.params.id;
 
-    const filteredList = app.inMemoryStore.filter(
-        (candidate) => {
-            return candidate.id != idToDelete;
-    });
+    app.inMemoryStore = app.inMemoryStore.filter(item=>item.id !== idToDelete);
 
-    app.inMemoryStore = filteredList;
-
-    res.status(200).send();
+    res.send();
 });
 
 module.exports = app;
