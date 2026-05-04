@@ -88,7 +88,7 @@ footer: "Web Anwendungen  - Sommersemester 2026"
 # HTML: Basic File Structure
 
 - HTML-Dokumente "brauchen" ein `<html>` Root Element
-- Trennung zwischen Meta-Informationen (`<header>`) und Content (`<body>`)
+- Trennung zwischen Meta-Informationen (`<head>`) und Content (`<body>`)
 
 ```html
 <!DOCTYPE html>
@@ -315,6 +315,12 @@ a {
 - Farben:
   - Hex `#FF0000`, `RGB(0, 0, 255)`, `RGBA(0, 255, 0, 0)`, Colornames `orange`
 - [CSS Units](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Values_and_units)
+
+---
+
+# CSS: Variablen
+
+- TODO
 
 ---
 
