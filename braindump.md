@@ -1,6 +1,9 @@
- Braindump
+# Braindump
 
 Hier werden einfach Ideen ge-brain-dumpt und später ausgearbeitet oder auch wieder verweorfen.
+
+## New Stuff
+* Passkeys/FIDO2 ([Computerphile](https://www.youtube.com/watch?v=lypcC79k-gg))
 
 ## Mögliche Themen
 
