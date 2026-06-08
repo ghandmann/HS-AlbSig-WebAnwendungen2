@@ -17,4 +17,4 @@ Repository zur Vorlesung WebAnwendungen 2 an der Hochschule Albstadt-Sigmaringen
 8) WebSecurity 1/2
 9) WebSecurity 2/2
 10) WebSockets
-11) Moderne Softwareentwicklung / Prüfungsvorbereitung
+11) Deployment von WebAnwendungen / Prüfungsvorbereitung
